@@ -36,7 +36,6 @@ class OnboardingScreen extends StatelessWidget {
             "Back",
             style: TextStyle(color: Colors.white),
           ),
-          // Adjust the padding for size
           dotsDecorator: DotsDecorator(
             activeColor: Colors.blue,
             size: const Size.square(8.0),
