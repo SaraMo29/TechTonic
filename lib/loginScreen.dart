@@ -20,7 +20,7 @@ class _LoginFormState extends State<Loginscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(),
+        leading: const BackButton(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -115,12 +115,12 @@ class _LoginFormState extends State<Loginscreen> {
                   children: [
                     IconButton(
                       icon:
-                          FaIcon(FontAwesomeIcons.facebook, color: Colors.blue),
+                          const FaIcon(FontAwesomeIcons.facebook, color: Colors.blue),
                       onPressed: () {},
                     ),
                     const SizedBox(width: 20),
                     IconButton(
-                      icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
+                      icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
                       onPressed: () {},
                     ),
                   ],
@@ -135,3 +135,4 @@ class _LoginFormState extends State<Loginscreen> {
     );
   }
 }
+
