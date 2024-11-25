@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/home.dart';
+import 'package:graduation_project/loginScreen.dart';
 import 'package:graduation_project/reusable_componnent/const_page_view_model.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -23,7 +23,7 @@ class OnboardingScreen extends StatelessWidget {
           ],
           onDone: () {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => Home()),
+              MaterialPageRoute(builder: (_) => Loginscreen()),
             );
           },
           showNextButton: true,
@@ -36,7 +36,6 @@ class OnboardingScreen extends StatelessWidget {
             "Back",
             style: TextStyle(color: Colors.white),
           ),
-          // Adjust the padding for size
           dotsDecorator: DotsDecorator(
             activeColor: Colors.blue,
             size: const Size.square(8.0),
