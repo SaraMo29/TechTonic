@@ -13,13 +13,13 @@ class OnboardingScreen extends StatelessWidget {
           pages: [
             ConstPageViewModel.createPage(
                 body: "Learn anytime and anywhere easily and conveniently",
-                imagePath: "lib/assets/page1.jpg"),
+                imagePath: "assets/images/page1.jpg"),
             ConstPageViewModel.createPage(
                 body: "Explore different learning tracks",
-                imagePath: "lib/assets/page2.jpg"),
+                imagePath: "assets/images/page2.jpg"),
             ConstPageViewModel.createPage(
                 body: "Start your learning journey with TechTonic right now!",
-                imagePath: "lib/assets/page3.jpg"),
+                imagePath: "assets/images/page3.jpg"),
           ],
           onDone: () {
             Navigator.of(context).pushReplacement(
