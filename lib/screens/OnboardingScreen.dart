@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/loginScreen.dart';
-import 'package:graduation_project/reusable_componnent/const_page_view_model.dart';
+import 'package:graduation_project/screens/loginScreen.dart';
+import 'package:graduation_project/components/const_page_view_model.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
@@ -23,7 +23,7 @@ class OnboardingScreen extends StatelessWidget {
           ],
           onDone: () {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => Loginscreen()),
+              MaterialPageRoute(builder: (_) => const Loginscreen()),
             );
           },
           showNextButton: true,
