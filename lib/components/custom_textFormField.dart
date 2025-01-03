@@ -37,7 +37,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         labelText: widget.lable,
         prefixIcon: Icon(
           widget.icon,
-          color: _isFocused ? Colors.blue : Colors.black,
+          color: Colors.blue,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
