@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomPassTextfield extends StatefulWidget {
-  const CustomPassTextfield({super.key});
+      final TextEditingController textEditingController;
+
+  const CustomPassTextfield({super.key, required this.textEditingController});
+
 
   @override
   _CustomPassTextfieldState createState() => _CustomPassTextfieldState();
@@ -14,6 +17,7 @@ class _CustomPassTextfieldState extends State<CustomPassTextfield> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.textEditingController,
       onTap: () {
         setState(() {
           _isFocused = true;
