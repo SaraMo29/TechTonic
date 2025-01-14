@@ -3,6 +3,7 @@ import 'package:graduation_project/components/const_passTextFormField.dart';
 import 'package:graduation_project/components/custom_button.dart';
 import 'package:graduation_project/components/custom_textFormField.dart';
 import 'package:graduation_project/screens/create_account_screen.dart';
+import 'package:graduation_project/screens/home_screen.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
@@ -20,7 +21,7 @@ class _LoginFormState extends State<Loginscreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -82,7 +83,13 @@ class _LoginFormState extends State<Loginscreen> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    const CustomButton(
+                    CustomButton(
+                      onPress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomeScreen()));
+                  },
                       textButton: 'Sign In',
                     ),
                     const SizedBox(
@@ -118,7 +125,7 @@ class _LoginFormState extends State<Loginscreen> {
                             );
                           },
                           child: TextButton(
-                            child: Text(
+                            child: const Text(
                               "Sign up",
                               style:
                                   TextStyle(fontSize: 16, color: Colors.blue),

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/screens/loginScreen.dart';
 
 class CreateAccountScreen extends StatefulWidget {
+  const CreateAccountScreen({super.key});
+
   @override
   State<CreateAccountScreen> createState() => _CreateAccountScreenState();
 }
@@ -14,6 +16,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    // ignore: unused_local_variable
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -97,7 +100,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         );
                       },
                       child: TextButton(
-                        child: Text(
+                        child: const Text(
                           "Sign in",
                           style: TextStyle(fontSize: 16, color: Colors.blue),
                         ),
@@ -105,7 +108,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Loginscreen()),
+                                builder: (context) => const Loginscreen()),
                           );
                         },
                       ),

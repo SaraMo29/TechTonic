@@ -1,28 +1,47 @@
 import 'package:flutter/material.dart';
 
 class UserNeeds extends StatelessWidget {
-  const UserNeeds({super.key, required this.question, required this.answer});
+  const UserNeeds({
+    super.key,
+    required this.question,
+    required this.answer,
+    this.questionColor = Colors.grey,  
+    this.answerColor = Colors.blue,   
+    this.questionFontSize = 15.0,      
+    this.answerFontSize = 14.0,   
+    this.mainAxisAlignment = MainAxisAlignment.center,     
+  });
+
   final String question;
   final String answer;
+  final Color questionColor;
+  final Color answerColor;
+  final double questionFontSize;
+  final double answerFontSize;
+  final MainAxisAlignment mainAxisAlignment;
+
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: mainAxisAlignment,
       children: [
         Text(
           question,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 15,
+          style: TextStyle(
+            color: questionColor,         
+            fontSize: questionFontSize,    
           ),
         ),
         TextButton(
           onPressed: () {},
           child: Text(
             answer,
-            style: const TextStyle(color: Colors.blue),
+            style: TextStyle(
+              color: answerColor,         
+              fontSize: answerFontSize,   
+            ),
           ),
-        )
+        ),
       ],
     );
   }
