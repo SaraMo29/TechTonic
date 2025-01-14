@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
-  const CustomTextFormField({
+  final TextEditingController textEditingController;
+  final String lable;
+  final IconData? icon;
+
+  const CustomTextFormField(
+    emailController, {
     super.key,
+    required this.textEditingController,
+    required this.lable, this.icon,
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _CustomTextFormFieldState createState() => _CustomTextFormFieldState();
 }
 
@@ -16,6 +22,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.textEditingController,
       onTap: () {
         setState(() {
           _isFocused = true;
@@ -27,10 +34,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         });
       },
       decoration: InputDecoration(
-        labelText: 'Email',
+        labelText: widget.lable,
         prefixIcon: Icon(
-          Icons.email,
-          color: _isFocused ? Colors.blue : Colors.black,
+          widget.icon,
+          color: Colors.blue,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),

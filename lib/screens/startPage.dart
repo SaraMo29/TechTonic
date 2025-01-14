@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/components/switch_theme_button.dart';
 import 'package:graduation_project/screens/create_account_screen.dart';
 import 'package:graduation_project/screens/loginScreen.dart';
 
@@ -8,6 +9,9 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: SwitchThemeButton(),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

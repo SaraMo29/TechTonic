@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:graduation_project/components/const_passTextFormField.dart';
 import 'package:graduation_project/components/custom_button.dart';
 import 'package:graduation_project/components/custom_textFormField.dart';
+import 'package:graduation_project/controllers/login_controller.dart';
 import 'package:graduation_project/screens/create_account_screen.dart';
 import 'package:graduation_project/screens/home_screen.dart';
 
@@ -13,6 +15,7 @@ class Loginscreen extends StatefulWidget {
 }
 
 class _LoginFormState extends State<Loginscreen> {
+  LoginController loginController = Get.put(LoginController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _rememberMe = false;
 
@@ -54,11 +57,19 @@ class _LoginFormState extends State<Loginscreen> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    const CustomTextFormField(),
+                    CustomTextFormField(
+                      textEditingController: loginController.emailController,
+                      'email adress',
+                      lable: 'Email',
+                      icon: Icons.email,
+                      
+                    ),
                     const SizedBox(
                       height: 20.0,
                     ),
-                    const CustomPassTextfield(),
+                    CustomPassTextfield(
+                      textEditingController: loginController.passwordController,
+                    ),
                     const SizedBox(
                       height: 20.0,
                     ),
@@ -83,14 +94,21 @@ class _LoginFormState extends State<Loginscreen> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    CustomButton(
-                      onPress: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomeScreen()));
-                  },
-                      textButton: 'Sign In',
+                    ElevatedButton(
+                      onPressed: () {
+                        loginController.loginWithEmail();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 15),
+                        textStyle: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      child: Text(
+                        'Log in',
+                      ),
                     ),
                     const SizedBox(
                       height: 20.0,

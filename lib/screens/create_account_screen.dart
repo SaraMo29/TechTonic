@@ -1,5 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:graduation_project/components/const_passTextFormField.dart';
+import 'package:graduation_project/components/custom_textFormField.dart';
+import 'package:graduation_project/controllers/regestration_controller.dart';
 import 'package:graduation_project/screens/loginScreen.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -13,10 +17,11 @@ bool rememberme = false;
 
 // ignore: camel_case_types
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  RegestrationController registerationController =
+      Get.put(RegestrationController());
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    // ignore: unused_local_variable
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -37,22 +42,24 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   width: 300,
                   height: 300,
                 ),
-                const TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
-                  ),
+                CustomTextFormField(
+                  textEditingController: registerationController.nameController,
+                  'name',
+                  lable: 'User Name',
+                  icon: Icons.person,
                 ),
                 const SizedBox(height: 20),
-                const TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
-                    suffixIcon: Icon(Icons.visibility),
-                  ),
+                CustomTextFormField(
+                  textEditingController:
+                      registerationController.emailController,
+                  'email address',
+                  lable: 'Email',
+                  icon: Icons.email,
+                ),
+                const SizedBox(height: 20),
+                CustomPassTextfield(
+                  textEditingController:
+                      registerationController.passwordController,
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -72,7 +79,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    registerationController.registerWithEmail();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     minimumSize: Size(screenWidth * 0.8, 50),
