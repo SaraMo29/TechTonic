@@ -8,10 +8,10 @@ import 'package:http/http.dart' as http;
 class RegestrationController extends GetxController {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   Future<void> registerWithEmail() async {
     try {
       var headers = {'Content-Type': 'application/json'};
@@ -21,29 +21,58 @@ class RegestrationController extends GetxController {
         'email': emailController.text.trim(),
         'password': passwordController.text,
       };
+
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
+
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['status'] == 'SUCCESS') {
           var token = json['data']['token'];
 
-          Get.off(HomeScreen());
+          Get.off(() => HomeScreen());
+
+          Get.snackbar(
+            'Registration Successful',
+            'Welcome, ${nameController.text}!',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+            borderRadius: 10,
+            margin: EdgeInsets.all(10),
+            duration: Duration(seconds: 3),
+            icon: Icon(Icons.check_circle, color: Colors.white),
+          );
         }
       } else {
         var error = jsonDecode(response.body);
-        throw error['message'] ?? 'An unknown error occurred';
+
+        String errorMessage = error['message'] ?? 'An unknown error occurred';
+
+        Get.snackbar(
+          'Registration Failed',
+          errorMessage,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          borderRadius: 10,
+          margin: EdgeInsets.all(10),
+          duration: Duration(seconds: 3),
+          icon: Icon(Icons.error, color: Colors.white),
+        );
       }
     } catch (e) {
-      showDialog(
-          context: Get.context!,
-          builder: (context) {
-            return SimpleDialog(
-              title: Text('Error'),
-              contentPadding: EdgeInsets.all(25),
-              children: [Text(e.toString())],
-            );
-          });
+      Get.snackbar(
+        'Registration Failed',
+        e.toString(),
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        borderRadius: 10,
+        margin: EdgeInsets.all(10),
+        duration: Duration(seconds: 3),
+        icon: Icon(Icons.error, color: Colors.white),
+      );
     }
   }
 }

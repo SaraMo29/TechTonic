@@ -4,18 +4,19 @@ import 'package:graduation_project/components/const_promo_card.dart';
 import 'package:graduation_project/components/cours_card.dart';
 import 'package:graduation_project/components/filters_listView.dart';
 import 'package:graduation_project/components/user_needs.dart';
+import 'package:graduation_project/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-   HomeScreen({super.key});
+  HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-   bool isBookMarked = false;
+  bool isBookMarked = false;
 
-   final List<Map<String, String>> mentorData = [
+  final List<Map<String, String>> mentorData = [
     {"name": "Jacob", "image": "assets/images/mentor1.jpg"},
     {"name": "Claire", "image": "assets/images/mentor2.jpg"},
     {"name": "Priscilla", "image": "assets/images/mentor5.png"},
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         toolbarHeight: 80,
@@ -37,10 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundImage: AssetImage("assets/images/myphoto.jpg"),
               radius: 25,
             ),
-             SizedBox(width: 20),
+            SizedBox(width: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
+              children: [
                 Text(
                   "Good Morning 👋",
                   style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -80,8 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: InputDecoration(
                   hintText: "Search",
                   hintStyle: const TextStyle(
-                      color: Color.fromARGB(83, 0, 0, 0),
-                      fontSize: 16), 
+                      color: Color.fromARGB(83, 0, 0, 0), fontSize: 16),
                   prefixIcon: const Icon(
                     Icons.search,
                     size: 25,
@@ -90,56 +91,68 @@ class _HomeScreenState extends State<HomeScreen> {
                   filled: true,
                   fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16), 
-                    borderSide: BorderSide.none, 
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
                   ),
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 16), 
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 ),
               ),
             ),
             const SizedBox(height: 20),
             PromoCarousel(),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             const Padding(
-              padding:   EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: UserNeeds(
                 question: "Top Mentors",
-                 answer: "See All",
-                 questionColor: Colors.black,
-                 questionFontSize: 20.0,
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 ),
+                answer: "See All",
+                questionColor: Colors.black,
+                questionFontSize: 20.0,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
             ),
-            const SizedBox(height: 20,),
-             Container(
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: mentorData.length,
-              itemBuilder: (context, index) {
-                return MentorCard(
-                  name: mentorData[index]["name"]!,
-                  imagepath: mentorData[index]["image"]!, 
-                );
-              },
+            const SizedBox(
+              height: 20,
             ),
-          ),
-           const SizedBox(height: 20,),
+            Container(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: mentorData.length,
+                itemBuilder: (context, index) {
+                  return MentorCard(
+                    name: mentorData[index]["name"]!,
+                    imagepath: mentorData[index]["image"]!,
+                  );
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             const Padding(
-              padding:   EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: UserNeeds(
                 question: "Most Popular Courses",
-                 answer: "See All",
-                 questionColor: Colors.black,
-                 questionFontSize: 20.0,
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 ),
+                answer: "See All",
+                questionColor: Colors.black,
+                questionFontSize: 20.0,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
             ),
-             const SizedBox(height: 20,),
-             FiltersListview(),
-             const SizedBox(height: 20,),
-             const CourseCard( ),
+            const SizedBox(
+              height: 20,
+            ),
+            FiltersListview(),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: const CourseCard(),
+            ),
           ],
         ),
       ),
@@ -149,14 +162,44 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.blue,
         selectedFontSize: 18,
         unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.assessment), label: 'My Course'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+              icon: IconButton(
+                icon: Icon(Icons.home),
+                onPressed: () {},
+              ),
+              label: 'Home'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Transaction'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
+              icon: IconButton(
+                icon: Icon(Icons.assessment),
+                onPressed: () {},
+              ),
+              label: 'My Course'),
+          BottomNavigationBarItem(
+              icon: IconButton(
+                icon: Icon(Icons.person),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(),
+                    ),
+                  );
+                },
+              ),
+              label: 'Profile'),
+          BottomNavigationBarItem(
+              icon: IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {},
+              ),
+              label: 'Transaction'),
+          BottomNavigationBarItem(
+              icon: IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () {},
+              ),
+              label: 'Setting'),
         ],
       ),
     );
