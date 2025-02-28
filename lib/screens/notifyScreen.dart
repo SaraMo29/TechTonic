@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/components/notification_card.dart';
 import 'package:graduation_project/components/notification_item.dart';
+import 'package:graduation_project/screens/home_screen.dart';
 
 
 class Notifyscreen extends StatelessWidget {
@@ -21,7 +22,14 @@ class Notifyscreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+                     Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  HomeScreen(),
+                    ),
+                  );
+          },
         ),
         actions: [
           IconButton(
