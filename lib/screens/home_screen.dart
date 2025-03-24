@@ -4,6 +4,7 @@ import 'package:graduation_project/components/const_promo_card.dart';
 import 'package:graduation_project/components/cours_card.dart';
 import 'package:graduation_project/components/filters_listView.dart';
 import 'package:graduation_project/components/user_needs.dart';
+import 'package:graduation_project/screens/bookMark_screen.dart';
 import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 
@@ -72,7 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: const Icon(Icons.notifications_none,
                       color: Colors.black)),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                     Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  BookmarkScreen(),
+                    ),
+                  );
+                  },
                   icon: const Icon(Icons.bookmark_outline_outlined,
                       color: Colors.black)),
             ],
