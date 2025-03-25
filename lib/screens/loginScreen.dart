@@ -5,6 +5,7 @@ import 'package:graduation_project/components/custom_button.dart';
 import 'package:graduation_project/components/custom_textFormField.dart';
 import 'package:graduation_project/controllers/login_controller.dart';
 import 'package:graduation_project/screens/create_account_screen.dart';
+import 'package:graduation_project/screens/forgot_password_screen.dart';
 import 'package:graduation_project/screens/home_screen.dart';
 
 class Loginscreen extends StatefulWidget {
@@ -62,7 +63,6 @@ class _LoginFormState extends State<Loginscreen> {
                       'email adress',
                       lable: 'Email',
                       icon: Icons.email,
-                      
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -114,7 +114,14 @@ class _LoginFormState extends State<Loginscreen> {
                       height: 20.0,
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ForgotPasswordScreen(),
+                          ),
+                        );
+                      },
                       child: const Text(
                         'Forgot your password?',
                         style: TextStyle(

@@ -1,0 +1,2 @@
+E:/flutter projects/TechTonic/android/app/.cxx/Debug/z37265as/x86_64/CMakeFiles/edit_cache.dir
+E:/flutter projects/TechTonic/android/app/.cxx/Debug/z37265as/x86_64/CMakeFiles/rebuild_cache.dir
