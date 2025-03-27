@@ -12,6 +12,7 @@ class CustomPassTextfield extends StatefulWidget {
 class _CustomPassTextfieldState extends State<CustomPassTextfield> {
   bool _isObscure = true;
   bool _isFocused = false;
+  String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class _CustomPassTextfieldState extends State<CustomPassTextfield> {
         });
       },
       decoration: InputDecoration(
-        labelText: 'Password',
+        labelText: this.label ?? 'Password',
         prefixIcon: Icon(
           Icons.lock,
           color: Colors.blue,
