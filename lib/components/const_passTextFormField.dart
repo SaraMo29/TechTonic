@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomPassTextfield extends StatefulWidget {
   final TextEditingController textEditingController;
+  final String? label;
 
-  const CustomPassTextfield({super.key, required this.textEditingController});
+  const CustomPassTextfield({super.key, required this.textEditingController, this.label});
 
   @override
   _CustomPassTextfieldState createState() => _CustomPassTextfieldState();
@@ -12,7 +13,7 @@ class CustomPassTextfield extends StatefulWidget {
 class _CustomPassTextfieldState extends State<CustomPassTextfield> {
   bool _isObscure = true;
   bool _isFocused = false;
-  String? label;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class _CustomPassTextfieldState extends State<CustomPassTextfield> {
         });
       },
       decoration: InputDecoration(
-        labelText: this.label ?? 'Password',
+        labelText: widget.label ?? 'Password',
         prefixIcon: Icon(
           Icons.lock,
           color: Colors.blue,

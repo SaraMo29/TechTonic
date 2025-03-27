@@ -59,6 +59,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
             const SizedBox(height: 10),
             CustomPassTextfield(
               textEditingController: _confirmPasswordController,
+              label: "Confirm Password",
               
         
             ),

@@ -1,24 +1,24 @@
-// controllers/login_controller.dart
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:graduation_project/screens/home_screen.dart';
-import 'package:graduation_project/screens/otp_verification_screen.dart';
 import 'package:http/http.dart' as http;
 
 class LoginController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   var isLoading = false.obs;
+  var token = ''.obs; 
+  var courses = <Map<String, dynamic>>[].obs; 
 
-  static const String baseUrl = 'https://nafsi.onrender.com/api/v1/auth';
+  static const String baseUrl = 'https://nafsi.onrender.com/api/v1';
   final Map<String, String> headers = {'Content-Type': 'application/json'};
 
 
   Future<void> loginWithEmail() async {
     try {
       isLoading.value = true;
-      var url = Uri.parse('$baseUrl/login');
+      var url = Uri.parse('$baseUrl/auth/login');
       Map body = {
         'email': emailController.text.trim(),
         'password': passwordController.text,
@@ -33,7 +33,8 @@ class LoginController extends GetxController {
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['status'] == 'SUCCESS') {
-          var token = json['data']['token'];
+          token.value = json['data']['token'];
+          await fetchCourses(); 
           Get.offNamed('/home');
           _showSuccessSnackbar('Login Successful', 'Welcome back!');
         }
@@ -49,6 +50,35 @@ class LoginController extends GetxController {
     }
   }
 
+  
+  Future<void> fetchCourses() async {
+    try {
+      isLoading.value = true;
+      var url = Uri.parse('$baseUrl/course/'); 
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${token.value}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        if (json['status'] == 'SUCCESS') {
+          courses.value = List<Map<String, dynamic>>.from(json['data']['results']);
+        }
+      } else {
+        var error = jsonDecode(response.body);
+        _showErrorSnackbar('Error', error['message'] ?? 'Failed to fetch courses');
+      }
+    } catch (e) {
+      _showErrorSnackbar('Error', 'Failed to fetch courses: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 
   Future<void> sendOtp() async {
     try {
@@ -59,7 +89,7 @@ class LoginController extends GetxController {
         return;
       }
 
-      var url = Uri.parse('$baseUrl/forget-password');
+      var url = Uri.parse('$baseUrl/auth/forget-password');
       Map body = {'email': email};
 
       http.Response response = await http.post(
@@ -71,8 +101,7 @@ class LoginController extends GetxController {
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['status'] == 'SUCCESS') {
-          _showSuccessSnackbar(
-              "Success", json['message'] ?? "OTP sent to your email");
+          _showSuccessSnackbar("Success", json['message'] ?? "OTP sent to your email");
           Get.toNamed('/otp-verification', arguments: {'email': email});
         }
       } else {
@@ -87,13 +116,14 @@ class LoginController extends GetxController {
     }
   }
 
+  
   Future<void> verifyOtp(String email, String otp) async {
     try {
       isLoading.value = true;
-      var url = Uri.parse('$baseUrl/confirm-reset');
+      var url = Uri.parse('$baseUrl/auth/confirm-reset');
       Map body = {
         'email': email,
-        'resetCode': otp, 
+        'resetCode': otp,
       };
 
       http.Response response = await http.post(
@@ -106,8 +136,7 @@ class LoginController extends GetxController {
         final json = jsonDecode(response.body);
         if (json['status'] == 'SUCCESS') {
           _showSuccessSnackbar("Success", json['message'] ?? "OTP verified");
-          Get.toNamed('/create-new-password',
-              arguments: {'email': email, 'otp': otp});
+          Get.toNamed('/create-new-password', arguments: {'email': email, 'otp': otp});
         }
       } else {
         var error = jsonDecode(response.body);
@@ -121,14 +150,14 @@ class LoginController extends GetxController {
     }
   }
 
-
+  
   Future<void> resetPassword(String email, String otp, String password) async {
     try {
       isLoading.value = true;
-      var url = Uri.parse('$baseUrl/reset-password');
+      var url = Uri.parse('$baseUrl/auth/reset-password');
       Map body = {
         'email': email,
-        'resetCode': otp, 
+        'resetCode': otp,
         'password': password,
         'passwordConfirm': password,
       };
@@ -142,8 +171,7 @@ class LoginController extends GetxController {
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['status'] == 'SUCCESS') {
-          _showSuccessSnackbar(
-              "Success", json['message'] ?? "Password reset successfully");
+          _showSuccessSnackbar("Success", json['message'] ?? "Password reset successfully");
           Get.offAllNamed('/login');
         }
       } else {
@@ -158,6 +186,15 @@ class LoginController extends GetxController {
     }
   }
 
+
+  Future<void> logout() async {
+    token.value = '';
+    courses.clear();
+    Get.offAllNamed('/login');
+    _showSuccessSnackbar("Logged Out", "You have been logged out successfully");
+  }
+
+
   void _showSuccessSnackbar(String title, String message) {
     Get.snackbar(
       title,
@@ -171,6 +208,7 @@ class LoginController extends GetxController {
       icon: const Icon(Icons.check_circle, color: Colors.white),
     );
   }
+
 
   void _showErrorSnackbar(String title, String message) {
     Get.snackbar(
