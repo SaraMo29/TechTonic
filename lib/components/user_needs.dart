@@ -5,11 +5,12 @@ class UserNeeds extends StatelessWidget {
     super.key,
     required this.question,
     required this.answer,
-    this.questionColor = Colors.grey,  
-    this.answerColor = Colors.blue,   
-    this.questionFontSize = 15.0,      
-    this.answerFontSize = 14.0,   
-    this.mainAxisAlignment = MainAxisAlignment.center,     
+    this.questionColor = Colors.grey,
+    this.answerColor = Colors.blue,
+    this.questionFontSize = 15.0,
+    this.answerFontSize = 14.0,
+    this.mainAxisAlignment = MainAxisAlignment.center,
+    this.onTap,
   });
 
   final String question;
@@ -19,6 +20,7 @@ class UserNeeds extends StatelessWidget {
   final double questionFontSize;
   final double answerFontSize;
   final MainAxisAlignment mainAxisAlignment;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +30,17 @@ class UserNeeds extends StatelessWidget {
         Text(
           question,
           style: TextStyle(
-            color: questionColor,         
-            fontSize: questionFontSize,    
+            color: questionColor,
+            fontSize: questionFontSize,
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: onTap, 
           child: Text(
             answer,
             style: TextStyle(
-              color: answerColor,         
-              fontSize: answerFontSize,   
+              color: answerColor,
+              fontSize: answerFontSize,
             ),
           ),
         ),

@@ -1,4 +1,5 @@
 
+// home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graduation_project/components/const_mentor_card.dart';
@@ -9,6 +10,7 @@ import 'package:graduation_project/controllers/login_controller.dart';
 import 'package:graduation_project/screens/bookMark_screen.dart';
 import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
+import 'package:graduation_project/screens/tobMentors_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -125,26 +127,39 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
               PromoCarousel(),
               const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: UserNeeds(
                   question: "Top Mentors",
                   answer: "See All",
                   questionColor: Colors.black,
                   questionFontSize: 20.0,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TopMentorsScreen()),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 20),
               Container(
-                height: 100,
-                child: ListView.builder(
+                height: 130,
+                padding: const EdgeInsets.only(left: 16),
+                child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: mentorData.length,
+                  separatorBuilder: (context, index) => const SizedBox(width: 12),
                   itemBuilder: (context, index) {
-                    return MentorCard(
-                      name: mentorData[index]["name"]!,
-                      imagepath: mentorData[index]["image"]!,
+                    return SizedBox(
+                      width: 80,
+                      child: MentorCard(
+                        name: mentorData[index]["name"]!,
+                        imagepath: mentorData[index]["image"]!,
+                        jobTitle: null,
+                        showChatIcon: false,
+                      ),
                     );
                   },
                 ),
@@ -175,10 +190,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           return CourseCard(
                             title: course['title'] ?? 'Unknown Course',
                             price: course['price']?['amount'] ?? 'N/A',
-                            discountPrice: null, // Not in API; add if available
+                            discountPrice: null,
                             image: course['thumbnail'] ?? 'assets/images/default_course.jpg',
                             rating: course['ratingsAverage']?.toString() ?? 'N/A',
-                            students: null, // Not in API; add if available
+                            students: null,
                             instructorName: course['instructorName'] ?? 'Unknown Instructor',
                             isBookMarked: isBookMarked[index],
                             onBookmarkToggle: () {
