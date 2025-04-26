@@ -1,4 +1,3 @@
-// const_mentor_card.dart
 import 'package:flutter/material.dart';
 
 class MentorCard extends StatelessWidget {
@@ -17,7 +16,8 @@ class MentorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // لو في وظيفه، يبقى شكل صف، غير كده شكل عمودي
+    final isNetwork = imagepath.startsWith('http');
+
     if (jobTitle != null) {
       return Container(
         padding: const EdgeInsets.all(10),
@@ -29,7 +29,10 @@ class MentorCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundImage: AssetImage(imagepath),
+              backgroundImage: isNetwork
+    ? NetworkImage(imagepath)
+    : (imagepath.isNotEmpty ? AssetImage(imagepath) : const AssetImage('assets/images/default.jpg')) as ImageProvider,
+
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -56,7 +59,9 @@ class MentorCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage(imagepath),
+            backgroundImage: isNetwork
+                ? NetworkImage(imagepath)
+                : AssetImage(imagepath) as ImageProvider,
           ),
           const SizedBox(height: 8),
           Text(

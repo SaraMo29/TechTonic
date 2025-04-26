@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:graduation_project/components/const_mentor_card.dart';
 
 class TopMentorsScreen extends StatefulWidget {
@@ -9,66 +11,15 @@ class TopMentorsScreen extends StatefulWidget {
 }
 
 class _TopMentorsScreenState extends State<TopMentorsScreen> {
-  final List<Map<String, String>> allMentors = [
-    {
-      "name": "Jacob Kulikowski",
-      "image": "assets/images/mentor1.jpg",
-      "job": "Full Stack Developer"
-    },
-    {
-      "name": "Claire Winters",
-      "image": "assets/images/mentor2.jpg",
-      "job": "Data Scientist"
-    },
-    {
-      "name": "Priscilla Nolan",
-      "image": "assets/images/mentor5.png",
-      "job": "Backend Developer "
-    },
-    {
-      "name": "Wade Warren",
-      "image": "assets/images/mentor3.jpg",
-      "job": "UX Designer"
-    },
-    {
-      "name": "Kathryn Murphy",
-      "image": "assets/images/mentor5.png",
-      "job": "Mobile Developer"
-    },
-     {
-      "name": "Mohamed Ahmed",
-      "image": "assets/images/mentor1.jpg",
-      "job": "Machine Learning Engineer"
-    },
-    {
-      "name": "Johan Winters",
-      "image": "assets/images/mentor2.jpg",
-      "job": "Cybersecurity Specialist"
-    },
-    {
-      "name": "Selia Nolan",
-      "image": "assets/images/mentor5.png",
-      "job": "Database Administrator"
-    },
-    {
-      "name": "Sandy Warren",
-      "image": "assets/images/mentor3.jpg",
-      "job": "Web Developer "
-    },
-    {
-      "name": "Kathryn Murphy",
-      "image": "assets/images/mentor5.png",
-      "job": "Software Testing "
-    },
-  ];
-
-  List<Map<String, String>> filteredMentors = [];
+  List<Map<String, dynamic>> allMentors = [];
+  List<Map<String, dynamic>> filteredMentors = [];
   final TextEditingController searchController = TextEditingController();
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    filteredMentors = allMentors; // default list
+    fetchMentors();
     searchController.addListener(_onSearchChanged);
   }
 
@@ -79,6 +30,52 @@ class _TopMentorsScreenState extends State<TopMentorsScreen> {
         return mentor["name"]!.toLowerCase().contains(query);
       }).toList();
     });
+  }
+
+  Future<void> fetchMentors() async {
+    const apiUrl = "https://nafsi.onrender.com/api/v1/users/top-instructors";
+
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q4ODRkZGVhZjJhNjhjMzQzODIzOGQiLCJpYXQiOjE3NDU2MDkyMTEsImV4cCI6MTc1NTk3NzIxMX0.UDECe1ZqE8YjAKN725hLOIHDcnioHPRxbzuc1d95fX4',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final List<dynamic> apiResults = jsonData['data']['results'];
+
+        final List<Map<String, dynamic>> apiMentors = apiResults
+            .cast<Map<String, dynamic>>()
+            .map((mentor) {
+          final rating = mentor["averageRating"]?.toString() ?? 'N/A';
+          final courses = mentor["totalCourses"]?.toString() ?? '0';
+          final students = mentor["totalStudents"]?.toString() ?? '0';
+
+          return {
+            "name": mentor["name"] ?? "No Name",
+            "image": mentor["profileImage"] ?? "",
+            "job": "Instructor ★ $rating\n$courses Course - $students Student"
+          };
+        }).toList();
+
+        setState(() {
+          allMentors = apiMentors;
+          filteredMentors = apiMentors;
+          isLoading = false;
+        });
+      } else {
+        throw Exception("Failed to load mentors: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching mentors: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -108,26 +105,28 @@ class _TopMentorsScreenState extends State<TopMentorsScreen> {
           cursorColor: Colors.blue,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-        child: filteredMentors.isEmpty
-            ? const Center(child: Text("No mentors found"))
-            : ListView.builder(
-                itemCount: filteredMentors.length,
-                itemBuilder: (context, index) {
-                  final mentor = filteredMentors[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
-                    child: MentorCard(
-                      name: mentor["name"]!,
-                      imagepath: mentor["image"]!,
-                      jobTitle: mentor["job"],
-                      showChatIcon: true,
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+              child: filteredMentors.isEmpty
+                  ? const Center(child: Text("No mentors found"))
+                  : ListView.builder(
+                      itemCount: filteredMentors.length,
+                      itemBuilder: (context, index) {
+                        final mentor = filteredMentors[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: MentorCard(
+                            name: mentor["name"],
+                            imagepath: mentor["image"],
+                            jobTitle: mentor["job"],
+                            showChatIcon: true,
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-      ),
+            ),
     );
   }
 }
