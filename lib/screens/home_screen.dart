@@ -1,5 +1,3 @@
-
-// home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graduation_project/components/const_mentor_card.dart';
@@ -11,6 +9,7 @@ import 'package:graduation_project/screens/bookMark_screen.dart';
 import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/tobMentors_screen.dart';
+import 'package:graduation_project/screens/all_course_screen.dart'; // تعديل هنا ليطابق الاسم الجديد
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -67,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Text(
                   "Sara Mohamed",
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                 ),
               ],
             ),
@@ -92,7 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (context) => BookmarkScreen()),
                   );
                 },
-                icon: const Icon(Icons.bookmark_outline_outlined, color: Colors.black),
+                icon: const Icon(Icons.bookmark_outline_outlined,
+                    color: Colors.black),
               ),
             ],
           ),
@@ -112,8 +113,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: TextFormField(
                   decoration: InputDecoration(
                     hintText: "Search",
-                    hintStyle: const TextStyle(color: Color.fromARGB(83, 0, 0, 0), fontSize: 16),
-                    prefixIcon: const Icon(Icons.search, size: 25, color: Colors.black),
+                    hintStyle: const TextStyle(
+                        color: Color.fromARGB(83, 0, 0, 0), fontSize: 16),
+                    prefixIcon:
+                        const Icon(Icons.search, size: 25, color: Colors.black),
                     filled: true,
                     fillColor: Colors.grey[200],
                     border: OutlineInputBorder(
@@ -138,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TopMentorsScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => TopMentorsScreen()),
                     );
                   },
                 ),
@@ -150,7 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: mentorData.length,
-                  separatorBuilder: (context, index) => const SizedBox(width: 12),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 12),
                   itemBuilder: (context, index) {
                     return SizedBox(
                       width: 80,
@@ -165,14 +170,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: UserNeeds(
-                  question: "Most Popular Courses",
+                  question: "Most Popular Courses", // الاسم الذي سيظهر للمستخدم
                   answer: "See All",
                   questionColor: Colors.black,
                   questionFontSize: 20.0,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AllCourseScreen()), // تعديل هنا
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 20),
@@ -184,17 +196,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
-                        children: loginController.courses.asMap().entries.map((entry) {
+                        children: loginController.courses
+                            .asMap()
+                            .entries
+                            .map((entry) {
                           final int index = entry.key;
                           final course = entry.value;
                           return CourseCard(
                             title: course['title'] ?? 'Unknown Course',
                             price: course['price']?['amount'] ?? 'N/A',
                             discountPrice: null,
-                            image: course['thumbnail'] ?? 'assets/images/default_course.jpg',
-                            rating: course['ratingsAverage']?.toString() ?? 'N/A',
+                            image: course['thumbnail'] ??
+                                'assets/images/default_course.jpg',
+                            rating:
+                                course['ratingsAverage']?.toString() ?? 'N/A',
                             students: null,
-                            instructorName: course['instructorName'] ?? 'Unknown Instructor',
+                            instructorName: course['instructorName'] ??
+                                'Unknown Instructor',
                             isBookMarked: isBookMarked[index],
                             onBookmarkToggle: () {
                               setState(() {
@@ -222,7 +240,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: IconButton(icon: const Icon(Icons.assessment), onPressed: () {}),
+            icon: IconButton(
+                icon: const Icon(Icons.assessment), onPressed: () {}),
             label: 'My Course',
           ),
           BottomNavigationBarItem(
@@ -238,7 +257,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: IconButton(icon: const Icon(Icons.shopping_cart), onPressed: () {}),
+            icon: IconButton(
+                icon: const Icon(Icons.shopping_cart), onPressed: () {}),
             label: 'Transaction',
           ),
           BottomNavigationBarItem(
