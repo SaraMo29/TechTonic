@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/course_details.controller.dart';
 import 'about_content.dart';
 import 'lessons_content.dart';
 import 'reviews_content.dart';
+import '../controllers/confirm_payment_controller.dart';
+import 'enroll_course_screen.dart';
 
 class CourseDetailScreen extends StatelessWidget {
+  final String courseId;
   final String title;
   final String price;
   final String? discountPrice;
@@ -13,6 +18,7 @@ class CourseDetailScreen extends StatelessWidget {
 
   const CourseDetailScreen({
     super.key,
+    required this.courseId,
     required this.title,
     required this.price,
     this.discountPrice,
@@ -23,9 +29,24 @@ class CourseDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize the controller
+    final CourseDetailsController controller =
+        Get.put(CourseDetailsController());
+
+    // Fetch course details
+    controller.fetchCourseDetails(courseId);
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
         body: SafeArea(
           child: Column(
             children: [
@@ -89,6 +110,26 @@ class CourseDetailScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => EnrollCourseScreen(courseId: courseId),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+            ),
+            child: Text("Enroll Course - \$$price",
+                style: const TextStyle(fontSize: 16, color: Colors.white)),
           ),
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/screens/course_details_screen.dart';
 
 class CourseCard extends StatelessWidget {
+  final String id;
   final String title;
   final String price;
   final String? discountPrice;
@@ -13,6 +14,7 @@ class CourseCard extends StatelessWidget {
   final VoidCallback onBookmarkToggle;
 
   const CourseCard({
+    required this.id,
     required this.title,
     required this.price,
     this.discountPrice,
@@ -35,6 +37,7 @@ class CourseCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => CourseDetailScreen(
+              courseId: id,
               title: title,
               price: price,
               discountPrice: discountPrice,

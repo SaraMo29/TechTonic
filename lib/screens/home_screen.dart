@@ -203,6 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           final int index = entry.key;
                           final course = entry.value;
                           return CourseCard(
+                            id: course['_id'] ??
+                                '', // Pass the course ID from API
                             title: course['title'] ?? 'Unknown Course',
                             price: course['price']?['amount'] ?? 'N/A',
                             discountPrice: null,

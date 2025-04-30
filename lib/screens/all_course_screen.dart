@@ -22,6 +22,7 @@ class _AllCourseScreenState extends State<AllCourseScreen> {
 
   final List<Map<String, dynamic>> allCourses = [
     {
+      "id": "course1", // Added course ID
       "title": "3D Design Illustration",
       "price": "80",
       "discountPrice": "48",
@@ -33,6 +34,7 @@ class _AllCourseScreenState extends State<AllCourseScreen> {
       "category": "3D Design"
     },
     {
+      "id": "course2", // Added course ID
       "title": "Digital Entrepreneurship",
       "price": "39",
       "discountPrice": null,
@@ -44,6 +46,7 @@ class _AllCourseScreenState extends State<AllCourseScreen> {
       "category": "Business"
     },
     {
+      "id": "course3", // Added course ID
       "title": "Learn UX User Persona",
       "price": "75",
       "discountPrice": "42",
@@ -55,6 +58,7 @@ class _AllCourseScreenState extends State<AllCourseScreen> {
       "category": "UI/UX"
     },
     {
+      "id": "course4", // Added course ID
       "title": "Flutter Mobile Apps",
       "price": "72",
       "discountPrice": "44",
@@ -175,6 +179,7 @@ class _AllCourseScreenState extends State<AllCourseScreen> {
                     itemBuilder: (context, index) {
                       final course = filteredCourses[index];
                       return CourseCard(
+                        id: course["id"], // Pass the course ID
                         title: course["title"],
                         price: course["price"],
                         discountPrice: course["discountPrice"],

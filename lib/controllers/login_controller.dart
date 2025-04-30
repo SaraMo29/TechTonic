@@ -200,30 +200,23 @@ class LoginController extends GetxController {
       title,
       message,
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-      borderRadius: 10,
-      margin: const EdgeInsets.all(10),
+      backgroundColor: Colors.green.withOpacity(0.1),
+      colorText: Colors.green,
       duration: const Duration(seconds: 3),
-      icon: const Icon(Icons.check_circle, color: Colors.white),
     );
   }
-
 
   void _showErrorSnackbar(String title, String message) {
     Get.snackbar(
       title,
       message,
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-      borderRadius: 10,
-      margin: const EdgeInsets.all(10),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red.withOpacity(0.1),
+      colorText: Colors.red,
       duration: const Duration(seconds: 3),
-      icon: const Icon(Icons.error, color: Colors.white),
     );
   }
-
+  
   @override
   void onClose() {
     emailController.dispose();
