@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/course_details.controller.dart';
+import 'instructor_detail_screen.dart';
 
 class AboutContent extends StatelessWidget {
   const AboutContent({super.key});
@@ -20,35 +21,54 @@ class AboutContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(
-                    controller.courseDetails['instructorImage'] ??
-                        'https://via.placeholder.com/150',
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.courseDetails['instructorName'] ??
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => InstructorDetailScreen(
+                      name: controller.courseDetails['instructorName'] ??
                           'Instructor Name',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      controller.courseDetails['instructorTitle'] ??
+                      jobTitle: controller.courseDetails['instructorTitle'] ??
                           'Instructor',
-                      style: const TextStyle(color: Colors.grey),
+                      image: controller.courseDetails['instructorImage'] ??
+                          'https://via.placeholder.com/150',
+                      bio: controller.courseDetails['instructorBio'] ??
+                          'No bio available',
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(
+                      controller.courseDetails['instructorImage'] ??
+                          'https://via.placeholder.com/150',
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.courseDetails['instructorName'] ??
+                            'Instructor Name',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        controller.courseDetails['instructorTitle'] ??
+                            'Instructor',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 24),
             const Text(
@@ -198,9 +218,8 @@ class AboutContent extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-            if (controller.aboutContent['tools'] == null ||
-                (controller.aboutContent['tools'] as List).isEmpty)
+              )
+            else
               const Text(
                 "No tools specified for this course",
                 style: TextStyle(fontSize: 16),
