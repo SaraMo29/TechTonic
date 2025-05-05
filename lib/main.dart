@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:graduation_project/controllers/book_mark_controller.dart';
+import 'package:graduation_project/controllers/login_controller.dart';
 import 'package:graduation_project/controllers/theme_controller.dart';
 import 'package:graduation_project/screens/loginScreen.dart';
 import 'package:graduation_project/screens/splash_screen.dart';
@@ -9,6 +11,8 @@ import 'package:graduation_project/screens/create_new_password_screen.dart';
 import 'package:graduation_project/screens/home_screen.dart';
 
 void main() {
+  Get.put(LoginController());
+  Get.put(BookmarkController());
   runApp(MyApp());
 }
 

@@ -5,11 +5,12 @@ import 'package:graduation_project/components/const_promo_card.dart';
 import 'package:graduation_project/components/cours_card.dart';
 import 'package:graduation_project/components/user_needs.dart';
 import 'package:graduation_project/controllers/login_controller.dart';
+import 'package:graduation_project/controllers/book_mark_controller.dart';
 import 'package:graduation_project/screens/bookMark_screen.dart';
 import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/tobMentors_screen.dart';
-import 'package:graduation_project/screens/all_course_screen.dart'; // تعديل هنا ليطابق الاسم الجديد
+import 'package:graduation_project/screens/all_course_screen.dart'; 
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -20,7 +21,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final LoginController loginController = Get.find();
-  late List<bool> isBookMarked;
+  final BookmarkController bookmarkController = Get.find<BookmarkController>();
+  // Remove: late List<bool> isBookMarked;
 
   final List<Map<String, String>> mentorData = [
     {"name": "Jacob", "image": "assets/images/mentor1.jpg"},
@@ -33,12 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    isBookMarked = List<bool>.filled(loginController.courses.length, false);
-    ever(loginController.courses, (_) {
-      setState(() {
-        isBookMarked = List<bool>.filled(loginController.courses.length, false);
-      });
-    });
+    // Remove isBookMarked logic, not needed anymore
   }
 
   @override
@@ -173,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: UserNeeds(
-                  question: "Most Popular Courses", // الاسم الذي سيظهر للمستخدم
+                  question: "Most Popular Courses",  
                   answer: "See All",
                   questionColor: Colors.black,
                   questionFontSize: 20.0,
@@ -182,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AllCourseScreen()), // تعديل هنا
+                          builder: (context) => AllCourseScreen()),   
                     );
                   },
                 ),
@@ -195,16 +192,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
+                      child: Obx(() => Column(
                         children: loginController.courses
                             .asMap()
                             .entries
                             .map((entry) {
                           final int index = entry.key;
                           final course = entry.value;
+                          final courseId = course['_id'] ?? '';
+                          final isBookmarked = bookmarkController.courses
+                              .any((c) => c['id'] == courseId);
+
                           return CourseCard(
-                            id: course['_id'] ??
-                                '', // Pass the course ID from API
+                            id: courseId,
                             title: course['title'] ?? 'Unknown Course',
                             price: course['price']?['amount'] ?? 'N/A',
                             discountPrice: null,
@@ -215,15 +215,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             students: null,
                             instructorName: course['instructorName'] ??
                                 'Unknown Instructor',
-                            isBookMarked: isBookMarked[index],
+                            isBookMarked: isBookmarked,
                             onBookmarkToggle: () {
-                              setState(() {
-                                isBookMarked[index] = !isBookMarked[index];
-                              });
+                              bookmarkController.toggleBookmark(
+                                courseId,
+                                isBookmarked,
+                              );
                             },
                           );
                         }).toList(),
-                      ),
+                      )),
                     ),
               const SizedBox(height: 20),
             ],

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
   TextEditingController emailController = TextEditingController();
@@ -222,5 +223,22 @@ class LoginController extends GetxController {
     emailController.dispose();
     passwordController.dispose();
     super.onClose();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadToken();
+  }
+
+  Future<void> _loadToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    token.value = prefs.getString('auth_token') ?? '';
+  }
+
+  Future<void> saveToken(String newToken) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('auth_token', newToken);
+    token.value = newToken;
   }
 }
