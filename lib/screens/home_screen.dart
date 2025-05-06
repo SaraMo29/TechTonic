@@ -10,7 +10,7 @@ import 'package:graduation_project/screens/bookMark_screen.dart';
 import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/tobMentors_screen.dart';
-import 'package:graduation_project/screens/all_course_screen.dart'; 
+import 'package:graduation_project/screens/all_course_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: UserNeeds(
-                  question: "Most Popular Courses",  
+                  question: "Most Popular Courses",
                   answer: "See All",
                   questionColor: Colors.black,
                   questionFontSize: 20.0,
@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AllCourseScreen()),   
+                          builder: (context) => AllCourseScreen()),
                     );
                   },
                 ),
@@ -193,38 +193,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   : Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Obx(() => Column(
-                        children: loginController.courses
-                            .asMap()
-                            .entries
-                            .map((entry) {
-                          final int index = entry.key;
-                          final course = entry.value;
-                          final courseId = course['_id'] ?? '';
-                          final isBookmarked = bookmarkController.courses
-                              .any((c) => c['id'] == courseId);
+                            children: loginController.courses
+                                .asMap()
+                                .entries
+                                .map((entry) {
+                              final int index = entry.key;
+                              final course = entry.value;
+                              final courseId = course['_id'] ?? '';
+                              final isBookmarked = bookmarkController.courses
+                                  .any((c) => c['id'] == courseId);
 
-                          return CourseCard(
-                            id: courseId,
-                            title: course['title'] ?? 'Unknown Course',
-                            price: course['price']?['amount'] ?? 'N/A',
-                            discountPrice: null,
-                            image: course['thumbnail'] ??
-                                'assets/images/default_course.jpg',
-                            rating:
-                                course['ratingsAverage']?.toString() ?? 'N/A',
-                            students: null,
-                            instructorName: course['instructorName'] ??
-                                'Unknown Instructor',
-                            isBookMarked: isBookmarked,
-                            onBookmarkToggle: () {
-                              bookmarkController.toggleBookmark(
-                                courseId,
-                                isBookmarked,
+                              return CourseCard(
+                                id: courseId,
+                                title: course['title'] ?? 'Unknown Course',
+                                price: course['price']?['amount'] ?? 'N/A',
+                                discountPrice: null,
+                                image: course['thumbnail'] ??
+                                    'assets/images/default_course.jpg',
+                                rating: course['ratingsAverage']?.toString() ??
+                                    'N/A',
+                                students: null,
+                                instructorName: course['instructorName'] ??
+                                    'Unknown Instructor',
+                                isBookMarked: isBookmarked,
+                                onBookmarkToggle: () {
+                                  bookmarkController.toggleBookmark(
+                                    courseId,
+                                    isBookmarked,
+                                  );
+                                },
                               );
-                            },
-                          );
-                        }).toList(),
-                      )),
+                            }).toList(),
+                          )),
                     ),
               const SizedBox(height: 20),
             ],
@@ -249,6 +249,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
+                icon: const Icon(Icons.shopping_cart), onPressed: () {}),
+            label: 'Transaction',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
               icon: const Icon(Icons.person),
               onPressed: () {
                 Navigator.push(
@@ -258,20 +263,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-                icon: const Icon(Icons.shopping_cart), onPressed: () {}),
-            label: 'Transaction',
-          ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                loginController.logout();
-              },
-            ),
-            label: 'Setting',
           ),
         ],
       ),

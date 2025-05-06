@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   carousel_slider: ^5.0.0
+  image_picker: ^1.0.4
   chewie: ^1.11.3
   flutter:
     sdk: flutter

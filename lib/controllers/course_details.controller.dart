@@ -79,7 +79,7 @@ class CourseDetailsController extends GetxController {
           // Fetch reviews via separate endpoint
           await fetchReviews(courseId);
 
-          Get.snackbar('Success', 'Course details loaded successfully');
+          
         } else {
           Get.snackbar('Error', jsonRes['message'] ?? 'Failed to load');
         }
@@ -138,7 +138,7 @@ class CourseDetailsController extends GetxController {
                 .toList(),
           );
           if (reviews.isEmpty) {
-            Get.snackbar('Info', 'No reviews available for this course');
+            
           }
         } else {
           Get.snackbar(
@@ -146,14 +146,13 @@ class CourseDetailsController extends GetxController {
         }
       } else if (response.statusCode == 404) {
         print('404 Error: ${response.body}'); // Debug 404 response
-        Get.snackbar(
-            'Error', 'Reviews endpoint not found (404). Check the URL.');
+        
       } else {
         print('Error response: ${response.body}'); // Debug error response
-        Get.snackbar('Error', 'Error fetching reviews: ${response.statusCode}');
+        
       }
     } catch (e) {
-      Get.snackbar('Error', 'Exception fetching reviews: $e');
+      
     }
   }
 
