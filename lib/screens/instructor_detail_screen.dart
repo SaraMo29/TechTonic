@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'courses_tab.dart';
-import 'students_tab.dart';
 import 'reviews_tab.dart';
 
 class InstructorDetailScreen extends StatelessWidget {
@@ -20,7 +19,7 @@ class InstructorDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Instructor Profile"),
@@ -52,22 +51,12 @@ class InstructorDetailScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(onPressed: () {}, child: const Text("Message")),
-                const SizedBox(width: 10),
-                OutlinedButton(onPressed: () {}, child: const Text("Website")),
-              ],
-            ),
-            const SizedBox(height: 20),
             const TabBar(
               labelColor: Colors.blue,
               unselectedLabelColor: Colors.grey,
               indicatorColor: Colors.blue,
               tabs: [
                 Tab(text: "Courses"),
-                Tab(text: "Students"),
                 Tab(text: "Reviews"),
               ],
             ),
@@ -76,7 +65,6 @@ class InstructorDetailScreen extends StatelessWidget {
               child: TabBarView(
                 children: [
                   CoursesTab(),
-                  StudentsTab(),
                   ReviewsTab(),
                 ],
               ),
