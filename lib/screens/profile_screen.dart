@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/screens/loginScreen.dart';
+import 'edit_profile_screen.dart';
+import 'notification_screen.dart';
+import 'security_screen.dart';
+import 'privacy_policy_screen.dart';
 import 'package:graduation_project/screens/startPage.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -24,13 +27,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(16.0),
         children: [
           UserHeader(),
-          UserOption(icon: Icons.edit, text: 'Edit Profile'),
-          UserOption(icon: Icons.notifications, text: 'Notification'),
-          UserOption(icon: Icons.payment, text: 'Payment'),
-          UserOption(icon: Icons.security, text: 'Security'),
-          UserOption(icon: Icons.privacy_tip, text: 'Privacy Policy'),
-          UserOption(icon: Icons.help, text: 'Help Center'),
-          UserOption(icon: Icons.people, text: 'Invite Friends'),
+          UserOption(
+            icon: Icons.edit,
+            text: 'Edit Profile',
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => EditProfileScreen()));
+            },
+          ),
+          UserOption(
+            icon: Icons.notifications,
+            text: 'Notification',
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => NotificationScreen()));
+            },
+          ),
+          UserOption(
+            icon: Icons.security,
+            text: 'Security',
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => SecurityScreen()));
+            },
+          ),
+          UserOption(
+            icon: Icons.privacy_tip,
+            text: 'Privacy Policy',
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => PrivacyPolicyScreen()));
+            },
+          ),
           const Divider(),
           ListTile(
             title: const Text('Logout'),
@@ -57,7 +85,7 @@ class UserHeader extends StatelessWidget {
         radius: 30,
         backgroundImage: AssetImage('assets/images/myphoto.jpg'),
       ),
-      title: const Text('Sara Mohamed'),
+      title: Text('Sara Mohamed'),
       subtitle: Text('sara_mohamed@gmail.com'),
     );
   }
@@ -66,8 +94,13 @@ class UserHeader extends StatelessWidget {
 class UserOption extends StatelessWidget {
   final IconData icon;
   final String text;
+  final VoidCallback onTap;
 
-  UserOption({required this.icon, required this.text});
+  const UserOption({
+    required this.icon,
+    required this.text,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +108,7 @@ class UserOption extends StatelessWidget {
       title: Text(text),
       leading: Icon(icon),
       trailing: const Icon(Icons.arrow_forward_ios),
+      onTap: onTap,
     );
   }
 }
