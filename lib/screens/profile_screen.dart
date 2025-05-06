@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/login_controller.dart';
 import 'edit_profile_screen.dart';
 import 'notification_screen.dart';
 import 'security_screen.dart';
@@ -80,14 +82,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
 class UserHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
-      leading: CircleAvatar(
-        radius: 30,
-        backgroundImage: AssetImage('assets/images/myphoto.jpg'),
-      ),
-      title: Text('Sara Mohamed'),
-      subtitle: Text('sara_mohamed@gmail.com'),
-    );
+    final loginController = Get.find<LoginController>();
+    return Obx(() => Column(
+      children: [
+        CircleAvatar(
+          radius: 40,
+          backgroundImage: loginController.userProfileImage.value.isNotEmpty
+            ? NetworkImage(loginController.userProfileImage.value)
+            : null,
+          child: loginController.userProfileImage.value.isEmpty
+            ? Icon(Icons.person, size: 40)
+            : null,
+        ),
+        SizedBox(height: 12),
+        Text(
+          loginController.userName.value,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        Text(
+          loginController.userEmail.value,
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+      ],
+    ),);
+    
   }
 }
 

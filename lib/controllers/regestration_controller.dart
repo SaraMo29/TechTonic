@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:graduation_project/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:graduation_project/controllers/login_controller.dart';
 
 class RegestrationController extends GetxController {
   TextEditingController nameController = TextEditingController();
@@ -29,6 +30,14 @@ class RegestrationController extends GetxController {
         final json = jsonDecode(response.body);
         if (json['status'] == 'SUCCESS') {
           var token = json['data']['token'];
+
+          // Set token in LoginController
+          final loginController = Get.find<LoginController>();
+          loginController.token.value = token;
+
+          // Fetch user profile and courses
+          await loginController.fetchUserProfile();
+          await loginController.fetchCourses();
 
           Get.off(() => HomeScreen());
 

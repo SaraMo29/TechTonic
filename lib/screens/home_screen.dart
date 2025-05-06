@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final LoginController loginController = Get.find();
+  final loginController = Get.find<LoginController>();
   final BookmarkController bookmarkController = Get.find<BookmarkController>();
   // Remove: late List<bool> isBookMarked;
 
@@ -47,29 +47,34 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         toolbarHeight: 80,
-        title: const Row(
+        title: Obx(() => Row(
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage("assets/images/myphoto.jpg"),
+              backgroundImage: loginController.userProfileImage.value.isNotEmpty
+                  ? NetworkImage(loginController.userProfileImage.value)
+                  : const AssetImage("assets/images/myphoto.jpg") as ImageProvider,
               radius: 25,
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Good Morning 👋",
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 Text(
-                  "Sara Mohamed",
-                  style: TextStyle(
+                  loginController.userName.value.isNotEmpty
+                      ? loginController.userName.value
+                      : "User",
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.black),
                 ),
+                // Removed the email Text widget here
               ],
             ),
           ],
-        ),
+        )),
         actions: [
           Row(
             children: [

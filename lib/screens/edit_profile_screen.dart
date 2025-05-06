@@ -13,14 +13,29 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final EditProfileController controller = Get.put(EditProfileController());
+  late TextEditingController nameController;
 
   @override
   void initState() {
     super.initState();
-    // Set token here from your login controller
     final loginController = Get.find<LoginController>();
     controller.setToken(loginController.token.value);
-    // Optionally, set initial values for name, gender, and profileImageUrl
+
+    nameController = TextEditingController();
+
+    // Listen to changes in the observable and update the controller
+    ever(controller.name, (val) {
+      nameController.text = val;
+    });
+
+    // Set initial value if already loaded
+    nameController.text = controller.name.value;
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -37,15 +52,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Stack(
                   children: [
                     CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.grey[300],
+                      radius: 40,
                       backgroundImage: controller.profileImageFile != null
                           ? FileImage(controller.profileImageFile!)
                           : (controller.profileImageUrl.value.isNotEmpty
                               ? NetworkImage(controller.profileImageUrl.value)
                               : null) as ImageProvider?,
                       child: controller.profileImageFile == null && controller.profileImageUrl.value.isEmpty
-                          ? Icon(Icons.person, size: 50, color: Colors.white)
+                          ? Icon(Icons.person, size: 40)
                           : null,
                     ),
                     Positioned(
@@ -69,9 +83,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               SizedBox(height: 24),
               TextFormField(
-                initialValue: controller.name.value,
+                controller: nameController,
                 decoration: InputDecoration(labelText: 'Name'),
-                onSaved: (value) => controller.name.value = value ?? '',
+                onChanged: (val) => controller.name.value = val,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';

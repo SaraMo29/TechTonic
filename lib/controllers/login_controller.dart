@@ -12,6 +12,11 @@ class LoginController extends GetxController {
   var token = ''.obs; 
   var courses = <Map<String, dynamic>>[].obs; 
 
+  // Add these observable variables for user info
+  var userName = ''.obs;
+  var userEmail = ''.obs;
+  var userProfileImage = ''.obs;
+
   static const String baseUrl = 'https://nafsi.onrender.com/api/v1';
   final Map<String, String> headers = {'Content-Type': 'application/json'};
 
@@ -35,6 +40,7 @@ class LoginController extends GetxController {
         final json = jsonDecode(response.body);
         if (json['status'] == 'SUCCESS') {
           token.value = json['data']['token'];
+          await fetchUserProfile(); // Fetch user info after login
           await fetchCourses(); 
           Get.offNamed('/home');
           _showSuccessSnackbar('Login Successful', 'Welcome back!');
@@ -48,6 +54,31 @@ class LoginController extends GetxController {
       _showErrorSnackbar('Login Failed', e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  // Add this function to fetch user profile info
+  Future<void> fetchUserProfile() async {
+    try {
+      var url = Uri.parse('$baseUrl/users/getMe');
+      var response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${token.value}',
+        },
+      );
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        if (json['status'] == 'SUCCESS') {
+          final data = json['data'];
+          userName.value = data['name'] ?? '';
+          userEmail.value = data['email'] ?? '';
+          userProfileImage.value = data['profileImage']?.trim() ?? '';
+        }
+      }
+    } catch (e) {
+      // Optionally handle error
     }
   }
 

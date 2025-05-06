@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
+import 'login_controller.dart';
+
 class EditProfileController extends GetxController {
   var name = ''.obs;
   var gender = ''.obs;
@@ -53,11 +55,37 @@ class EditProfileController extends GetxController {
         gender.value = jsonRes['data']['gender'];
         profileImageUrl.value = jsonRes['data']['profileImage'];
         Get.snackbar('Success', 'Profile updated successfully!');
+        Get.find<LoginController>().fetchUserProfile();
       } else {
         Get.snackbar('Error', jsonRes['message'] ?? 'Failed to update profile');
       }
     } else {
       Get.snackbar('Error', 'Failed to update profile: ${response.statusCode}');
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchUserProfile();
+  }
+
+  Future<void> fetchUserProfile() async {
+    if (token == null) return;
+    final url = Uri.parse('$baseUrl/users/getMe');
+    final response = await http.get(
+      url,
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final jsonRes = jsonDecode(response.body);
+      if (jsonRes['status'] == 'SUCCESS') {
+        final data = jsonRes['data'];
+        name.value = data['name'] ?? '';
+        gender.value = data['gender'] ?? '';
+        profileImageUrl.value = data['profileImage']?.trim() ?? '';
+        // Optionally, set profileImageFile if you want to allow immediate editing
+      }
     }
   }
 }
