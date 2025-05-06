@@ -121,8 +121,8 @@ class CourseDetailsController extends GetxController {
             'Review API response body: ${response.body.substring(0, min(response.body.length, 300))}...'); // Debug response (partial)
 
         if (jsonRes['status'] == 'SUCCESS') {
-          // The data is directly an array in the new API format
-          final raw = (jsonRes['data'] as List?) ?? [];
+          // The data is now inside data['result']
+          final raw = (jsonRes['data']?['result'] as List?) ?? [];
           print('Found ${raw.length} reviews'); // Debug review count
 
           reviews.assignAll(

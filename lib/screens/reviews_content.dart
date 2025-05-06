@@ -96,14 +96,6 @@ class ReviewsContent extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Column(
-                        children: [
-                          const Icon(Icons.thumb_up,
-                              size: 20, color: Colors.blue),
-                          const SizedBox(height: 4),
-                          Text(review['likes'] ?? '0'),
-                        ],
-                      ),
                     ],
                   ),
                   const SizedBox(height: 12),
