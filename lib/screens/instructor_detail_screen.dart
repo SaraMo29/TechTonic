@@ -46,10 +46,7 @@ class InstructorDetailScreen extends StatelessWidget {
                 data['name'] ?? '',
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              Text(
-                data['email'] ?? '',
-                style: const TextStyle(color: Colors.grey),
-              ),
+              
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

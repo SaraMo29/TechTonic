@@ -18,7 +18,7 @@ class CoursesTab extends StatelessWidget {
         return _courseCard(
           course['title'] ?? 'No Title',
           course['price']['amount'] != null ? '\$${course['price']['amount']}' : '',
-          '${course['students'] ?? 0} students',
+          '${course['enrolledCount'] ?? 0} students',
         );
       },
     );
