@@ -57,6 +57,7 @@ class CourseDetailsController extends GetxController {
             'instructorImage': data['instructor']?['profileImage'] ?? '',
             'instructorTitle': data['instructor']?['roles'] ?? 'Instructor',
             'trailerUrl': data['videoTrailer'] ?? '',
+            'instructorId': data['instructor']?['_id'] ?? '', // <-- Add this line
           };
 
           // About Content

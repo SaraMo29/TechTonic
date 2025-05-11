@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 
 class ReviewsTab extends StatelessWidget {
+  final List<dynamic> reviews;
+
+  const ReviewsTab({Key? key, required this.reviews}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    if (reviews.isEmpty) {
+      return Center(child: Text('No reviews available.'));
+    }
+    return ListView.builder(
       padding: EdgeInsets.all(16),
-      children: [
-        _reviewTile(
-            'Francene Vandyne',
-            'The course is very good. The explanation is very clear and easy to understand.',
-            369),
-        _reviewTile(
-            'Rachel Foose',
-            'Awesome! This is what I was looking for. I recommend it to everyone.',
-            238),
-      ],
+      itemCount: reviews.length,
+      itemBuilder: (context, index) {
+        final review = reviews[index];
+        return _reviewTile(
+          review['name'] ?? 'Anonymous',
+          review['comment'] ?? '',
+          review['likes'] ?? 0,
+        );
+      },
     );
   }
 
@@ -28,9 +34,9 @@ class ReviewsTab extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.favorite, size: 16, color: Colors.red),
+            
             SizedBox(width: 4),
-            Text(likes.toString()),
+            
           ],
         ),
       ),

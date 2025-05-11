@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 
 class CoursesTab extends StatelessWidget {
+  final List<dynamic> courses;
+
+  const CoursesTab({Key? key, required this.courses}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    if (courses.isEmpty) {
+      return Center(child: Text('No courses available.'));
+    }
+    return ListView.builder(
       padding: EdgeInsets.all(16),
-      children: [
-        _courseCard('Learn UX User Persona', '\$42', '7,098 students'),
-        _courseCard('3D Design Illustration', '\$42', '6,987 students'),
-      ],
+      itemCount: courses.length,
+      itemBuilder: (context, index) {
+        final course = courses[index];
+        return _courseCard(
+          course['title'] ?? 'No Title',
+          course['price']['amount'] != null ? '\$${course['price']['amount']}' : '',
+          '${course['students'] ?? 0} students',
+        );
+      },
     );
   }
 

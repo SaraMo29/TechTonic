@@ -1,79 +1,89 @@
 import 'package:flutter/material.dart';
 import 'courses_tab.dart';
 import 'reviews_tab.dart';
+import 'package:get/get.dart';
+import '../controllers/instructor_detail_controller.dart';
 
 class InstructorDetailScreen extends StatelessWidget {
-  final String name;
-  final String jobTitle;
-  final String image;
-  final String bio;
+  final String instructorId;
 
   const InstructorDetailScreen({
     super.key,
-    required this.name,
-    required this.jobTitle,
-    required this.image,
-    required this.bio,
+    required this.instructorId,
   });
 
   @override
   Widget build(BuildContext context) {
+    final InstructorDetailController controller = Get.put(InstructorDetailController());
+
+    // Fetch instructor data when screen is built
+    controller.fetchInstructorProfile(instructorId);
+
     return DefaultTabController(
-      length: 2,
+      length: 2, // or however many tabs you have
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Instructor Profile"),
           centerTitle: true,
         ),
-        body: Column(
-          children: [
-            const SizedBox(height: 20),
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(image),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              jobTitle,
-              style: const TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                InfoColumn(title: "25", subtitle: "Courses"),
-                InfoColumn(title: "22,379", subtitle: "Students"),
-                InfoColumn(title: "9,287", subtitle: "Reviews"),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const TabBar(
-              labelColor: Colors.blue,
-              unselectedLabelColor: Colors.grey,
-              indicatorColor: Colors.blue,
-              tabs: [
-                Tab(text: "Courses"),
-                Tab(text: "Reviews"),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: TabBarView(
+        body: Obx(() {
+          if (controller.isLoading.value) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (controller.instructorData.isEmpty) {
+            return Center(child: Text('No data found.'));
+          }
+          final data = controller.instructorData;
+          return Column(
+            children: [
+              const SizedBox(height: 20),
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(data['profileImage'] ?? ''),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                data['name'] ?? '',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                data['email'] ?? '',
+                style: const TextStyle(color: Colors.grey),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CoursesTab(),
-                  ReviewsTab(),
+                  InfoColumn(title: "${data['totalCourses'] ?? 0}", subtitle: "Courses"),
+                  InfoColumn(title: "${data['totalStudents'] ?? 0}", subtitle: "Students"),
+                  InfoColumn(title: "${data['totalReviews'] ?? 0}", subtitle: "Reviews"),
                 ],
               ),
-            )
-          ],
-        ),
+              const SizedBox(height: 20),
+              const TabBar(
+                labelColor: Colors.blue,
+                unselectedLabelColor: Colors.grey,
+                indicatorColor: Colors.blue,
+                tabs: [
+                  Tab(text: "Courses"),
+                  Tab(text: "Reviews"),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    CoursesTab(courses: data['courses'] ?? []),
+                    ReviewsTab(reviews: data['reviews'] ?? []),
+                  ],
+                ),
+              )
+            ],
+          );
+        }),
       ),
     );
-  }
+    }
 }
 
 class InfoColumn extends StatelessWidget {

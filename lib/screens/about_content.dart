@@ -27,14 +27,7 @@ class AboutContent extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (_) => InstructorDetailScreen(
-                      name: controller.courseDetails['instructorName'] ??
-                          'Instructor Name',
-                      jobTitle: controller.courseDetails['instructorTitle'] ??
-                          'Instructor',
-                      image: controller.courseDetails['instructorImage'] ??
-                          'https://via.placeholder.com/150',
-                      bio: controller.courseDetails['instructorBio'] ??
-                          'No bio available',
+                      instructorId: controller.courseDetails['instructorId'] ?? '',
                     ),
                   ),
                 );
