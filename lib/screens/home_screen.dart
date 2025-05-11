@@ -9,6 +9,7 @@ import 'package:graduation_project/components/user_needs.dart';
 import 'package:graduation_project/controllers/login_controller.dart';
 import 'package:graduation_project/controllers/book_mark_controller.dart';
 import 'package:graduation_project/screens/bookMark_screen.dart';
+import 'package:graduation_project/screens/instructor_detail_screen.dart';
 import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/tobMentors_screen.dart';
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final courses = mentor["totalCourses"]?.toString() ?? '0';
           final students = mentor["totalStudents"]?.toString() ?? '0';
           return {
+            "id": mentor["_id"]?.toString() ?? "", // <-- Add this line
             "name": mentor["name"] ?? "No Name",
             "image": mentor["profileImage"] ?? "",
             "job": "Instructor ★ $rating\n$courses Course - $students Student"
@@ -204,27 +206,39 @@ class _HomeScreenState extends State<HomeScreen> {
                               final mentor = mentorData[index];
                               return SizedBox(
                                 width: 80,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 32,
-                                      backgroundImage: mentor["image"] != null && mentor["image"].isNotEmpty
-                                          ? NetworkImage(mentor["image"])
-                                          : const AssetImage("assets/images/myphoto.jpg") as ImageProvider,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      mentor["name"] ?? "",
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                child: GestureDetector(
+                                  onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => InstructorDetailScreen(
+                                    instructorId: mentor["id"] ?? "",
+                                  ),
+                                ),
+                              );
+                            },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 32,
+                                        backgroundImage: mentor["image"] != null && mentor["image"].isNotEmpty
+                                            ? NetworkImage(mentor["image"])
+                                            : const AssetImage("assets/images/myphoto.jpg") as ImageProvider,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        mentor["name"] ?? "",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },

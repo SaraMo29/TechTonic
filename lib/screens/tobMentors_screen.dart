@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:graduation_project/screens/instructor_detail_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:graduation_project/components/const_mentor_card.dart';
 
@@ -56,6 +57,7 @@ class _TopMentorsScreenState extends State<TopMentorsScreen> {
           final students = mentor["totalStudents"]?.toString() ?? '0';
 
           return {
+            "id": mentor["_id"]?.toString() ?? "", // <-- Add this line
             "name": mentor["name"] ?? "No Name",
             "image": mentor["profileImage"] ?? "",
             "job": "Instructor ★ $rating\n$courses Course - $students Student"
@@ -115,13 +117,25 @@ class _TopMentorsScreenState extends State<TopMentorsScreen> {
                       itemCount: filteredMentors.length,
                       itemBuilder: (context, index) {
                         final mentor = filteredMentors[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: MentorCard(
-                            name: mentor["name"],
-                            imagepath: mentor["image"],
-                            jobTitle: mentor["job"],
-                            showChatIcon: true,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InstructorDetailScreen(
+                                  instructorId: mentor["id"] ?? "", // Make sure "id" is included in mentor data
+                                ),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: MentorCard(
+                              name: mentor["name"],
+                              imagepath: mentor["image"],
+                              jobTitle: mentor["job"],
+                              
+                            ),
                           ),
                         );
                       },
