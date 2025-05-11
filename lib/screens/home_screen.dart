@@ -1,3 +1,5 @@
+import 'dart:convert' show jsonDecode;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graduation_project/components/const_mentor_card.dart';
@@ -11,6 +13,7 @@ import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/tobMentors_screen.dart';
 import 'package:graduation_project/screens/all_course_screen.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -22,20 +25,55 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final loginController = Get.find<LoginController>();
   final BookmarkController bookmarkController = Get.find<BookmarkController>();
-  // Remove: late List<bool> isBookMarked;
 
-  final List<Map<String, String>> mentorData = [
-    {"name": "Jacob", "image": "assets/images/mentor1.jpg"},
-    {"name": "Claire", "image": "assets/images/mentor2.jpg"},
-    {"name": "Priscilla", "image": "assets/images/mentor5.png"},
-    {"name": "Wade", "image": "assets/images/mentor3.jpg"},
-    {"name": "Kathryn", "image": "assets/images/mentor5.png"},
-  ];
+  List<Map<String, dynamic>> mentorData = [];
+  bool isMentorLoading = true;
 
   @override
   void initState() {
     super.initState();
-    // Remove isBookMarked logic, not needed anymore
+    fetchMentors();
+  }
+
+  Future<void> fetchMentors() async {
+    const apiUrl = "https://nafsi.onrender.com/api/v1/users/top-instructors";
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q4ODRkZGVhZjJhNjhjMzQzODIzOGQiLCJpYXQiOjE3NDU2MDkyMTEsImV4cCI6MTc1NTk3NzIxMX0.UDECe1ZqE8YjAKN725hLOIHDcnioHPRxbzuc1d95fX4',
+          'Content-Type': 'application/json',
+        },
+      );
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final List<dynamic> apiResults = jsonData['data']['results'];
+        final List<Map<String, dynamic>> apiMentors = apiResults
+            .cast<Map<String, dynamic>>()
+            .map((mentor) {
+          final rating = mentor["averageRating"]?.toString() ?? 'N/A';
+          final courses = mentor["totalCourses"]?.toString() ?? '0';
+          final students = mentor["totalStudents"]?.toString() ?? '0';
+          return {
+            "name": mentor["name"] ?? "No Name",
+            "image": mentor["profileImage"] ?? "",
+            "job": "Instructor ★ $rating\n$courses Course - $students Student"
+          };
+        }).toList();
+        setState(() {
+          mentorData = apiMentors;
+          isMentorLoading = false;
+        });
+      } else {
+        setState(() {
+          isMentorLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isMentorLoading = false;
+      });
+    }
   }
 
   @override
@@ -153,23 +191,44 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: 130,
                 padding: const EdgeInsets.only(left: 16),
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: mentorData.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: 80,
-                      child: MentorCard(
-                        name: mentorData[index]["name"]!,
-                        imagepath: mentorData[index]["image"]!,
-                        jobTitle: null,
-                        showChatIcon: false,
-                      ),
-                    );
-                  },
-                ),
+                child: isMentorLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : mentorData.isEmpty
+                        ? const Center(child: Text("No mentors found"))
+                        : ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: mentorData.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 12),
+                            itemBuilder: (context, index) {
+                              final mentor = mentorData[index];
+                              return SizedBox(
+                                width: 80,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 32,
+                                      backgroundImage: mentor["image"] != null && mentor["image"].isNotEmpty
+                                          ? NetworkImage(mentor["image"])
+                                          : const AssetImage("assets/images/myphoto.jpg") as ImageProvider,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      mentor["name"] ?? "",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
               ),
               const SizedBox(height: 20),
               Padding(
