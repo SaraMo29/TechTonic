@@ -4,7 +4,6 @@ import '../controllers/course_details.controller.dart';
 import 'about_content.dart';
 import 'lessons_content.dart';
 import 'reviews_content.dart';
-import '../controllers/confirm_payment_controller.dart';
 import 'enroll_course_screen.dart';
 
 class CourseDetailScreen extends StatelessWidget {

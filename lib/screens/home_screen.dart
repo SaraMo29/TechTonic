@@ -2,7 +2,6 @@ import 'dart:convert' show jsonDecode;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:graduation_project/components/const_mentor_card.dart';
 import 'package:graduation_project/components/const_promo_card.dart';
 import 'package:graduation_project/components/cours_card.dart';
 import 'package:graduation_project/components/user_needs.dart';
@@ -10,6 +9,7 @@ import 'package:graduation_project/controllers/login_controller.dart';
 import 'package:graduation_project/controllers/book_mark_controller.dart';
 import 'package:graduation_project/screens/bookMark_screen.dart';
 import 'package:graduation_project/screens/instructor_detail_screen.dart';
+import 'package:graduation_project/screens/my_courses_screen.dart';
 import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/tobMentors_screen.dart';
@@ -89,11 +89,22 @@ class _HomeScreenState extends State<HomeScreen> {
         toolbarHeight: 80,
         title: Obx(() => Row(
           children: [
-            CircleAvatar(
-              backgroundImage: loginController.userProfileImage.value.isNotEmpty
-                  ? NetworkImage(loginController.userProfileImage.value)
-                  : const AssetImage("assets/images/myphoto.jpg") as ImageProvider,
-              radius: 25,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+                );
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: CircleAvatar(
+                  backgroundImage: loginController.userProfileImage.value.isNotEmpty
+                      ? NetworkImage(loginController.userProfileImage.value)
+                      : const AssetImage("assets/images/myphoto.jpg") as ImageProvider,
+                  radius: 25,
+                ),
+              ),
             ),
             const SizedBox(width: 20),
             Column(
@@ -275,6 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .asMap()
                                 .entries
                                 .map((entry) {
+                              // ignore: unused_local_variable
                               final int index = entry.key;
                               final course = entry.value;
                               final courseId = course['_id'] ?? '';
@@ -322,7 +334,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-                icon: const Icon(Icons.assessment), onPressed: () {}),
+                icon: const Icon(Icons.assessment), onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyCoursesScreen()),
+                );
+                }),
             label: 'My Course',
           ),
           BottomNavigationBarItem(
