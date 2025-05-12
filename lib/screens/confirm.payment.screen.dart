@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/confirm_payment_controller.dart';
+import 'course_content.dart';
 
 class ConfirmPaymentScreen extends StatefulWidget {
   final String providerName;
@@ -68,8 +69,18 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() => activeButtonIndex = 0);
-                    // Navigate back to course details screen instead of home
-                    Navigator.pop(context);
+                    // Navigate to course content screen
+                    Navigator.pop(context); // Close the dialog first
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CourseContent(
+                          id: widget.courseId,
+                          title: 'Course Content', // You might want to pass the actual course title here
+                          progress: 0.0, // Initial progress for a newly enrolled course
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: activeButtonIndex == 0

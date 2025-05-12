@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../controllers/confirm_payment_controller.dart';
 import 'confirm.payment.screen.dart';
 
 class EnrollCourseScreen extends StatefulWidget {
@@ -16,9 +15,6 @@ class _EnrollCourseScreenState extends State<EnrollCourseScreen> {
   int selectedMethodIndex = 0;
 
   final List<Map<String, String>> paymentMethods = [
-    {"name": "PayPal", "icon": "assets/images/paypal.png"},
-    {"name": "Google Pay", "icon": "assets/images/google_pay.webp"},
-    {"name": "Apple Pay", "icon": "assets/images/apple_pay.jpg"},
     {"name": "Vodafone Cash", "icon": "assets/images/vodafon.jpg"},
     {"name": "Etisalat Cash", "icon": "assets/images/Etisalat.jpg"},
   ];

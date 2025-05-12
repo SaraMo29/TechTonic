@@ -21,6 +21,7 @@ dependencies:
   pinput: ^5.0.1
   shared_preferences: ^2.3.3
   video_player: ^2.9.5
+  percent_indicator: ^4.2.2 
   
 
 dev_dependencies:

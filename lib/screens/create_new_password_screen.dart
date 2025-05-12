@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graduation_project/components/const_passTextFormField.dart';
-import 'package:graduation_project/components/custom_textFormField.dart';
 import 'package:graduation_project/controllers/login_controller.dart';
 
 class CreateNewPasswordScreen extends StatefulWidget {

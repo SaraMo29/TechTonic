@@ -40,6 +40,7 @@ class LoginController extends GetxController {
         final json = jsonDecode(response.body);
         if (json['status'] == 'SUCCESS') {
           token.value = json['data']['token'];
+          await saveToken(token.value);
           await fetchUserProfile(); // Fetch user info after login
           await fetchCourses(); 
           Get.offNamed('/home');
