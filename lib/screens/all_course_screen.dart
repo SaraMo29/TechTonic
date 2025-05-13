@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:graduation_project/controllers/login_controller.dart';
+import 'package:graduation_project/controllers/book_mark_controller.dart';
 
 class AllCourseScreen extends StatefulWidget {
   const AllCourseScreen({super.key});
@@ -23,6 +24,7 @@ class _AllCourseScreenState extends State<AllCourseScreen> {
   Map<String, String> courseIdToCategory = {};
 
   final LoginController loginController = Get.find<LoginController>();
+  final BookmarkController bookmarkController = Get.find<BookmarkController>();
 
   @override
   void initState() {
@@ -202,8 +204,13 @@ class _AllCourseScreenState extends State<AllCourseScreen> {
                       itemCount: filteredCourses.length,
                       itemBuilder: (context, index) {
                         final course = filteredCourses[index];
-                        return CourseCard(
-                          id: course["_id"] ?? "",
+                        final courseId = course["_id"] ?? "";
+                        // Check if this course is bookmarked
+                        final isBookmarked = bookmarkController.courses.any(
+                          (c) => c['id'] == courseId,
+                        );
+                        return Obx(() => CourseCard(
+                          id: courseId,
                           title: course["title"] ?? course["name"] ?? "",
                           price: course["price"]["amount"]?.toString() ?? "",
                           discountPrice: course["discountPrice"]?.toString(),
@@ -215,9 +222,14 @@ class _AllCourseScreenState extends State<AllCourseScreen> {
                           instructorName: course["instructorName"] ??
                               course["instructor"] ??
                               "",
-                          isBookMarked: false,
-                          onBookmarkToggle: () {},
-                        );
+                          isBookMarked: bookmarkController.courses.any((c) => c['id'] == courseId),
+                          onBookmarkToggle: () {
+                            bookmarkController.toggleBookmark(
+                              courseId,
+                              bookmarkController.courses.any((c) => c['id'] == courseId),
+                            );
+                          },
+                        ));
                       },
                     ),
             ),
