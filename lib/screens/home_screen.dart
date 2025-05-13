@@ -14,6 +14,7 @@ import 'package:graduation_project/screens/notifyScreen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/tobMentors_screen.dart';
 import 'package:graduation_project/screens/all_course_screen.dart';
+import 'package:graduation_project/screens/transaction_screen.dart';
 import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
@@ -42,21 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
       final response = await http.get(
         Uri.parse(apiUrl),
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q4ODRkZGVhZjJhNjhjMzQzODIzOGQiLCJpYXQiOjE3NDU2MDkyMTEsImV4cCI6MTc1NTk3NzIxMX0.UDECe1ZqE8YjAKN725hLOIHDcnioHPRxbzuc1d95fX4',
+          'Authorization':
+              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q4ODRkZGVhZjJhNjhjMzQzODIzOGQiLCJpYXQiOjE3NDU2MDkyMTEsImV4cCI6MTc1NTk3NzIxMX0.UDECe1ZqE8YjAKN725hLOIHDcnioHPRxbzuc1d95fX4',
           'Content-Type': 'application/json',
         },
       );
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final List<dynamic> apiResults = jsonData['data']['results'];
-        final List<Map<String, dynamic>> apiMentors = apiResults
-            .cast<Map<String, dynamic>>()
-            .map((mentor) {
+        final List<Map<String, dynamic>> apiMentors =
+            apiResults.cast<Map<String, dynamic>>().map((mentor) {
           final rating = mentor["averageRating"]?.toString() ?? 'N/A';
           final courses = mentor["totalCourses"]?.toString() ?? '0';
           final students = mentor["totalStudents"]?.toString() ?? '0';
           return {
-            "id": mentor["_id"]?.toString() ?? "", // <-- Add this line
+            "id": mentor["_id"]?.toString() ?? "",
             "name": mentor["name"] ?? "No Name",
             "image": mentor["profileImage"] ?? "",
             "job": "Instructor ★ $rating\n$courses Course - $students Student"
@@ -88,44 +89,45 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         toolbarHeight: 80,
         title: Obx(() => Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()),
-                );
-              },
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: CircleAvatar(
-                  backgroundImage: loginController.userProfileImage.value.isNotEmpty
-                      ? NetworkImage(loginController.userProfileImage.value)
-                      : const AssetImage("assets/images/myphoto.jpg") as ImageProvider,
-                  radius: 25,
-                ),
-              ),
-            ),
-            const SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Good Morning 👋",
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()),
+                    );
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: CircleAvatar(
+                      backgroundImage: loginController
+                              .userProfileImage.value.isNotEmpty
+                          ? NetworkImage(loginController.userProfileImage.value)
+                          : const AssetImage("assets/images/myphoto.jpg")
+                              as ImageProvider,
+                      radius: 25,
+                    ),
+                  ),
                 ),
-                Text(
-                  loginController.userName.value.isNotEmpty
-                      ? loginController.userName.value
-                      : "User",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Good Morning 👋",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    Text(
+                      loginController.userName.value.isNotEmpty
+                          ? loginController.userName.value
+                          : "User",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                  ],
                 ),
-                // Removed the email Text widget here
               ],
-            ),
-          ],
-        )),
+            )),
         actions: [
           Row(
             children: [
@@ -219,23 +221,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 80,
                                 child: GestureDetector(
                                   onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => InstructorDetailScreen(
-                                    instructorId: mentor["id"] ?? "",
-                                  ),
-                                ),
-                              );
-                            },
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            InstructorDetailScreen(
+                                          instructorId: mentor["id"] ?? "",
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       CircleAvatar(
                                         radius: 32,
-                                        backgroundImage: mentor["image"] != null && mentor["image"].isNotEmpty
+                                        backgroundImage: mentor["image"] !=
+                                                    null &&
+                                                mentor["image"].isNotEmpty
                                             ? NetworkImage(mentor["image"])
-                                            : const AssetImage("assets/images/myphoto.jpg") as ImageProvider,
+                                            : const AssetImage(
+                                                    "assets/images/myphoto.jpg")
+                                                as ImageProvider,
                                       ),
                                       const SizedBox(height: 8),
                                       Text(
@@ -286,7 +293,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .asMap()
                                 .entries
                                 .map((entry) {
-                              // ignore: unused_local_variable
                               final int index = entry.key;
                               final course = entry.value;
                               final courseId = course['_id'] ?? '';
@@ -334,17 +340,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-                icon: const Icon(Icons.assessment), onPressed: () {
-                  Navigator.push(
+              icon: const Icon(Icons.assessment),
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => MyCoursesScreen()),
                 );
-                }),
+              },
+            ),
             label: 'My Course',
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-                icon: const Icon(Icons.shopping_cart), onPressed: () {}),
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TransactionScreen()),
+                );
+              },
+            ),
             label: 'Transaction',
           ),
           BottomNavigationBarItem(
