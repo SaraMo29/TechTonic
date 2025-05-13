@@ -103,7 +103,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   children: [
                     Text('Gender:'),
                     Radio<String>(
-                      value: 'male',
+                      value: 'Male',
                       groupValue: controller.gender.value,
                       onChanged: (value) {
                         controller.gender.value = value ?? '';
@@ -111,7 +111,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     Text('Male'),
                     Radio<String>(
-                      value: 'female',
+                      value: 'Female',
                       groupValue: controller.gender.value,
                       onChanged: (value) {
                         controller.gender.value = value ?? '';
