@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/confirm_payment_controller.dart';
-import 'course_content.dart';
+import '../controllers/transaction_controller.dart';
+import '../screens/course_content.dart';
+import '../screens/e_receipt_screen.dart';
 
 class ConfirmPaymentScreen extends StatefulWidget {
   final String providerName;
@@ -18,30 +20,27 @@ class ConfirmPaymentScreen extends StatefulWidget {
 }
 
 class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
-  int activeButtonIndex = 0;
-  final ConfirmPaymentController controller =
-      Get.put(ConfirmPaymentController());
+  final ConfirmPaymentController _payCtrl = Get.put(ConfirmPaymentController());
+  final TransactionController _txCtrl = Get.find<TransactionController>();
+  int _activeIndex = 0;
 
   Future<void> _processPayment() async {
-    bool success = await controller.processPayment(widget.courseId);
-
+    final success = await _payCtrl.processPayment(widget.courseId);
     if (success) {
-      _showSuccessDialog(controller.getReceiptData());
+      _showSuccessDialog(_payCtrl.receiptData.value);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(controller.errorMessage.value)),
-      );
+      final msg = _payCtrl.errorMessage.value;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
-  void _showSuccessDialog(Map<String, dynamic> receiptData) {
-    final bool isAlreadyEnrolled =
-        receiptData['Status']?.toLowerCase() == 'already enrolled';
+  void _showSuccessDialog(Map<String, dynamic> data) {
+    final already = data['Status']?.toString().toLowerCase() == 'already enrolled';
 
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
+      builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         contentPadding: const EdgeInsets.all(24),
         content: Column(
@@ -50,110 +49,79 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
             const Icon(Icons.check_circle, size: 60, color: Colors.blue),
             const SizedBox(height: 16),
             Text(
-              isAlreadyEnrolled ? 'Already Enrolled!' : 'Payment Successful!',
+              already ? 'Already Enrolled!' : 'Payment Successful!',
               style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
-              isAlreadyEnrolled
+              already
                   ? 'You are already enrolled in this course.'
-                  : 'You have successfully made payment and enrolled the course with ${widget.providerName}.',
+                  : 'You have successfully made payment with ${widget.providerName}.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() => activeButtonIndex = 0);
-                    // Navigate to course content screen
-                    Navigator.pop(context); // Close the dialog first
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CourseContent(
-                          id: widget.courseId,
-                          title: 'Course Content', // You might want to pass the actual course title here
-                          progress: 0.0, // Initial progress for a newly enrolled course
-                        ),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: activeButtonIndex == 0
-                        ? Colors.blue
-                        : Colors.grey.shade300,
-                    foregroundColor:
-                        activeButtonIndex == 0 ? Colors.white : Colors.blue,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: const Text('View Course'),
-                ),
-                const SizedBox(height: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() => activeButtonIndex = 1);
-                    _showReceiptDetails(receiptData);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: activeButtonIndex == 1
-                        ? Colors.blue
-                        : Colors.grey.shade300,
-                    foregroundColor:
-                        activeButtonIndex == 1 ? Colors.white : Colors.blue,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: const Text('View E-Receipt'),
-                ),
-              ],
-            ),
+            _buildActionButtons(data, already),
           ],
         ),
       ),
     );
   }
 
-  void _showReceiptDetails(Map<String, dynamic> receiptData) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('E-Receipt',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: receiptData.entries
-                .map((e) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            '${e.key}: ',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Expanded(child: Text('${e.value ?? "N/A"}')),
-                        ],
-                      ),
-                    ))
-                .toList(),
-          ),
+  Widget _buildActionButtons(Map<String, dynamic> data, bool already) {
+    return Column(
+      children: [
+        _buildDialogButton(
+          label: 'View Course',
+          selected: _activeIndex == 0,
+          onTap: () {
+            setState(() => _activeIndex = 0);
+            Navigator.pop(context);           // close dialog
+            _txCtrl.fetchTransactions();      // refresh list
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CourseContent(
+                  id: widget.courseId,
+                  title: 'Course Content',
+                  progress: 0.0,
+                ),
+              ),
+            );
+          },
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
+        const SizedBox(height: 12),
+        _buildDialogButton(
+          label: 'View E-Receipt',
+          selected: _activeIndex == 1,
+          onTap: () {
+            setState(() => _activeIndex = 1);
+            Navigator.pop(context);
+            _txCtrl.fetchTransactions();
+            Get.off(() => ReceiptScreen(), arguments: data);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDialogButton({
+    required String label,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: selected ? Colors.blue : Colors.grey.shade300,
+        foregroundColor: selected ? Colors.white : Colors.blue,
+        minimumSize: const Size(double.infinity, 50),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
+      child: Text(label),
     );
   }
 
@@ -175,11 +143,10 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
             ),
             const SizedBox(height: 16),
             TextField(
-              controller: controller.phoneController,
+              controller: _payCtrl.phoneController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 hintText: 'Eg. 01012345678',
               ),
             ),
@@ -189,20 +156,18 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  if (controller.phoneController.text.trim().isNotEmpty) {
+                  if (_payCtrl.phoneController.text.trim().isNotEmpty) {
                     _processPayment();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Please enter a valid phone number')),
+                      const SnackBar(content: Text('Please enter a valid phone number')),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 child: const Text('Continue', style: TextStyle(fontSize: 16)),
               ),

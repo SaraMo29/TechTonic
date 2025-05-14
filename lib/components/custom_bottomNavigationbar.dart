@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/screens/home_screen.dart';
 import 'package:graduation_project/screens/my_courses_screen.dart';
 import 'package:graduation_project/screens/profile_screen.dart';
+import 'package:graduation_project/screens/transaction_screen.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -32,7 +33,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
               MaterialPageRoute(builder: (context) => MyCoursesScreen()),
             );
             break;
-          case 2:
+            case 2:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => TransactionScreen()),
+            );
+            break;
+          case 3:
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => ProfileScreen()),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:graduation_project/components/custom_bottomNavigationbar.dart';
 import '../controllers/enrolled_courses_controller.dart';
 import 'lessons_tab.dart';
 import 'certificate_tab.dart';
@@ -44,25 +45,7 @@ class CourseContent extends StatelessWidget {
               CertificateTab(isCompleted: isCompleted),
             ],
           ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blue,
-              ),
-              onPressed: () {
-                if (isCompleted) {
-                  print('Start Course Again');
-                } else {
-                  print('Continue Course');
-                }
-              },
-              child: Text(
-                isCompleted ? 'Start Course Again' : 'Continue Course',
-              ),
-            ),
-          ),
+          bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 1),
         ),
       ),
     );

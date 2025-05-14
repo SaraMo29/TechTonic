@@ -1,67 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/transaction_controller.dart';
+import '../components/custom_bottomNavigationbar.dart';
 import 'e_receipt_screen.dart';
+import 'home_screen.dart'; 
 
 class TransactionScreen extends StatelessWidget {
-  final List<Map<String, String>> transactions = [
-    {"title": "Mastering Figma A to Z"},
-    {"title": "Mastering Blender 3D"},
-    {"title": "Build Personal Branding"},
-    {"title": "Complete UI Designer"},
-    {"title": "Full-Stack Web Developer"},
-  ];
+  TransactionScreen({Key? key}) : super(key: key);
+  final ctrl = Get.put(TransactionController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Transactions"),
-        elevation: 0,
-      ),
-      body: ListView.builder(
-        itemCount: transactions.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              ListTile(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                leading: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: AssetImage("assets/images/startpage.png"),
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () async {
+        Get.offAll(() => HomeScreen());
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Transactions', style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: BackButton(
+            color: Colors.black,
+            onPressed: () {
+              Get.offAll(() => HomeScreen());
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.black),
+              onPressed: () {},
+            )
+          ],
+        ),
+        body: Obx(() {
+          if (ctrl.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (ctrl.transactions.isEmpty) {
+            return const Center(child: Text("No transactions found."));
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: ctrl.transactions.length,
+            itemBuilder: (context, i) {
+              final tx = ctrl.transactions[i];
+              return Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      // ignore: deprecated_member_use
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    )
+                  ],
                 ),
-                title: Text(
-                  transactions[index]['title']!,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EReceiptScreen(
-                          courseTitle: transactions[index]['title']!,
-                        ),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      tx.courseImage,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  child: const Text("E-Receipt"),
+                  title: Text(tx.courseTitle),
+                  subtitle: Text(tx.status, style: const TextStyle(color: Colors.blue)),
+                  trailing: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlue,
+                      shape: const StadiumBorder(),
+                    ),
+                    onPressed: () {
+                      Get.to(() => ReceiptScreen(), arguments: tx);
+                    },
+                    child: const Text(
+                      "E-Receipt",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
-              ),
-              const Divider(
-                color: Colors.grey,
-                thickness: 0.5,
-                indent: 16,
-                endIndent: 16,
-              ),
-            ],
+              );
+            },
           );
-        },
+        }),
+        bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
       ),
     );
   }

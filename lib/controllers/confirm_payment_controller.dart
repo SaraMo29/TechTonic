@@ -52,12 +52,15 @@ class ConfirmPaymentController extends GetxController {
           receiptData.value = {
             'Transaction ID': jsonRes['data']?['_id'] ?? 'N/A',
             'Course': jsonRes['data']?['course']?['title'] ?? 'N/A',
-            'Amount': jsonRes['data']?['amount']?.toString() ?? 'N/A',
+            'Price': jsonRes['data']?['amount'] != null 
+                ? "EGP ${jsonRes['data']['amount']}" 
+                : 'N/A',
+            'Payment Method': _getPaymentMethodFromPhone(phoneController.text.trim()),
             'Phone Number':
                 jsonRes['data']?['phoneNumber'] ?? phoneController.text.trim(),
             'Date': jsonRes['data']?['createdAt'] != null
-                ? DateTime.parse(jsonRes['data']['createdAt']).toString()
-                : DateTime.now().toString(),
+                ? DateTime.parse(jsonRes['data']['createdAt'])
+                : DateTime.now(),
             'Status': jsonRes['data']?['status'] ?? 'Completed',
           };
           return true;
@@ -68,9 +71,13 @@ class ConfirmPaymentController extends GetxController {
             false) {
           // Handle already enrolled case
           receiptData.value = {
-            'Status': 'Already Enrolled',
+            'Transaction ID': 'N/A',
             'Course': 'Current Course',
-            'Date': DateTime.now().toString(),
+            'Price': 'N/A',
+            'Payment Method': _getPaymentMethodFromPhone(phoneController.text.trim()),
+            'Phone Number': phoneController.text.trim(),
+            'Date': DateTime.now(),
+            'Status': 'Already Enrolled',
           };
           return true;
         } else {
@@ -96,12 +103,19 @@ class ConfirmPaymentController extends GetxController {
   Map<String, dynamic> getReceiptData() {
     return receiptData.value;
   }
+  
+  String _getPaymentMethodFromPhone(String phone) {
+    if (phone.startsWith('010')) return 'Vodafone Cash';
+    if (phone.startsWith('011')) return 'Etisalat Cash';
+    return 'Other';
+  }
 
   void _showErrorSnackbar(String message) {
     Get.snackbar(
       'Error',
       message,
       snackPosition: SnackPosition.BOTTOM,
+      // ignore: deprecated_member_use
       backgroundColor: Colors.red.withOpacity(0.1),
       colorText: Colors.red,
       duration: Duration(seconds: 3),
