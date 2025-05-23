@@ -1,67 +1,115 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import '../controllers/transaction_controller.dart';
+import '../models/transaction_model.dart';
+import 'transaction_screen.dart';
 
-class EReceiptScreen extends StatelessWidget {
-  final String courseTitle;
+class ReceiptScreen extends StatelessWidget {
+  ReceiptScreen({Key? key}) : super(key: key);
+  final tx = Get.arguments as TransactionModel;
+  final df = DateFormat('MMM dd, yyyy | HH:mm:ss');
 
-  const EReceiptScreen({Key? key, required this.courseTitle}) : super(key: key);
+  String get _paymentMethod {
+    if (tx.purchasePhone.startsWith('010')) return 'Vodafone Cash';
+    if (tx.purchasePhone.startsWith('011')) return 'Etisalat Cash';
+    return 'Other';
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("E-Receipt"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return WillPopScope(
+      onWillPop: () async {
+        Get.find<TransactionController>().fetchTransactions();
+        Get.off(() => TransactionScreen());
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("E-Receipt", style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.white,
+          leading: BackButton(
+            color: Colors.black,
+            onPressed: () {
+              Get.find<TransactionController>().fetchTransactions();
+              Get.off(() => TransactionScreen());
+            },
+          ),
+          elevation: 0,
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(20),
           children: [
-            Center(
-              child: Icon(Icons.qr_code, size: 100, color: Colors.black),
-            ),
-            const SizedBox(height: 24),
-            buildRow("Course", courseTitle),
-            buildRow("Category", "UI/UX Design"),
-            buildRow("Name", "Andrew Ainsley"),
-            buildRow("Email", "andrew_ainsley@domain.com"),
-            buildRow("Price", "\$40.00"),
-            buildRow("Payment", "Credit Card"),
-            buildRow("Date", "Dec 14, 2024 | 14:27 PM"),
-            buildRow("Transaction ID", "SK7263727399"),
-            buildRow("Status", "Paid"),
+            Image.asset('assets/images/e-receipt.jpg', height:100, fit:BoxFit.contain),
+            const SizedBox(height:10),
+            Center(child: Text(tx.transactionId, style: const TextStyle(fontWeight: FontWeight.w600))),
+            const SizedBox(height:20),
+
+            _Section([
+              _Info("Course", tx.courseTitle),
+              _Info("Category", tx.courseCategory),
+            ]),
+            const SizedBox(height:16),
+
+            _Section([
+              _Info("Name", tx.userName),
+              _Info("Email", tx.userEmail),
+            ]),
+            const SizedBox(height:16),
+
+            _Section([
+              _Info("Price", "${tx.coursePriceCurrency} ${tx.coursePriceAmount}"),
+              _Info("Payment Method", _paymentMethod),
+              _Info("Date", df.format(tx.createdAt)),
+              _Info("Transaction ID", tx.transactionId),
+              _Info("Status", tx.status, badge: true),
+            ]),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget buildRow(String label, String value) {
+class _Section extends StatelessWidget {
+  final List<Widget> children;
+  const _Section(this.children);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(16)),
+      child: Column(children: children),
+    );
+  }
+}
+
+class _Info extends StatelessWidget {
+  final String label, value;
+  final bool badge;
+  const _Info(this.label, this.value, {this.badge = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Text(
+      value,
+      style: badge
+          ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+          : null,
+    );
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical:6),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              "$label:",
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Text(
-              value,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ),
-          ),
+          Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w500))),
+          if (badge)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal:10, vertical:5),
+              decoration: BoxDecoration(color: Colors.blue.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
+              child: text
+            )
+          else text,
         ],
       ),
     );
