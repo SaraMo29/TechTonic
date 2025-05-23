@@ -30,36 +30,108 @@ TechTonic is a modern e-learning platform designed to deliver high-quality cours
 
 ---
 
-## 🔧 Getting Started
+# 🔧 Getting Started
 
-### Prerequisites
+## Prerequisites
 
-- Node.js (v14 or later)  
-- npm 
-- Flutter SDK  
-- MongoDB instance  
-- Cloudinary account (for media storage)
+Before you begin, ensure your system meets the following requirements and that you have installed the necessary software dependencies:
 
-### Installation
+### System Requirements
 
-## 🔧 Getting Started
-### Clone & Setup Backend
-# 
+- **Operating System**  
+  - Windows 10 or later  
+  - macOS 11 (Big Sur) or later  
+  - Linux distributions (Ubuntu 18.04+, Fedora 32+, etc.)
+
+- **Hardware**  
+  - CPU: 64-bit dual-core or better  
+  - RAM: Minimum 4 GB (8 GB+ recommended)  
+  - Disk Space: At least 2 GB free for code and dependencies (plus media storage for Cloudinary uploads)  
+  - Internet connection (for downloading dependencies and connecting to remote services)
+
+### Software Dependencies
+
+- **Git** (for cloning the repository)  
+- **Node.js** v14 or later  
+- **npm** (bundled with Node.js)  
+- **Flutter SDK** v3.x or later  
+- **Dart SDK** (comes with Flutter)  
+- **MongoDB** 4.x or 5.x (local or hosted instance)  
+- **Cloudinary** account (for media storage; you’ll need cloud name, API key & secret)  
+
+### Optional Tools
+
+- **Postman** or **Insomnia** (for API testing)  
+- **VS Code**, **WebStorm**, or another IDE/text editor of your choice  
+- **Homebrew** (macOS) or **Chocolatey** (Windows) for simplified package management  
+
+---
+
+## Installation
+
+### Clone & Setup
+```bash 
+# 1. Clone the backend repo
+git clone https://github.com/Faresaymann/techtonic-backend.git
+# This creates a folder named `techtonic-backend`
+
+# 2. Clone the frontend repo
+git clone https://github.com/SaraMo29/TechTonic.git Techtonic
+# The `TechTonic` folder will contain your Flutter code
+```
+
+### Setup Backend
+
+#### Windows (PowerShell)
 ```bash
-git clone https://github.com/Faresaymann/repo_name.git
-cd techtonic-backend
+cd backend
+npm install
+Copy-Item .env.example .env
+# Edit .env with Notepad or VS Code
+notepad .env
+npm run dev
+```
+
+#### macOS / Linux
+```bash
+cd backend
 npm install
 cp .env.example .env
-# Edit the .env file with your credentials
+# Edit .env with your credentials
 nano .env
 npm run dev
 ```
-### Clone & Setup Frontend
+
+### Setup Frontend
+
+#### macOS / Linux
 ```bash
-git clone https://github.com/SaraMo29/TechTonic.git
-cd techtonic-frontend
+cd frontend
 flutter pub get
 flutter run
+```
+
+#### Windows (PowerShell)
+```bash 
+cd frontend
+flutter pub get
+flutter run
+```
+
+---
+## Configuration 
+  Your .env file (located in /backend) must include the following variables:
+```bash
+# MongoDB connection
+MONGO_URI=mongodb://localhost:27017/techtonic
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# (optional) Server port
+PORT=3000
 ```
 ---
 
