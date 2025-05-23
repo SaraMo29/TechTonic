@@ -46,7 +46,7 @@ TechTonic is a modern e-learning platform designed to deliver high-quality cours
 ### Clone & Setup Backend
 # 
 ```bash
-git clone https://github.com/Faresaymann/E-learning.git
+git clone https://github.com/Faresaymann/repo_name.git
 cd techtonic-backend
 npm install
 cp .env.example .env
