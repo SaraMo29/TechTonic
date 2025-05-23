@@ -22,6 +22,9 @@ dependencies:
   shared_preferences: ^2.3.3
   video_player: ^2.9.5
   percent_indicator: ^4.2.2 
+  flutter_highlight: ^0.7.0
+  code_text_field: ^1.1.0
+  highlight: ^0.7.0
   
 
 dev_dependencies:

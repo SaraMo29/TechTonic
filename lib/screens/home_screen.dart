@@ -15,6 +15,7 @@ import 'package:graduation_project/screens/profile_screen.dart';
 import 'package:graduation_project/screens/tobMentors_screen.dart';
 import 'package:graduation_project/screens/all_course_screen.dart';
 import 'package:graduation_project/screens/transaction_screen.dart';
+import 'package:graduation_project/screens/compiler_screen.dart';
 import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
@@ -349,6 +350,18 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             label: 'My Course',
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              icon: const Icon(Icons.code),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CompilerScreen()),
+                );
+              },
+            ),
+            label: 'Compiler',
           ),
           BottomNavigationBarItem(
             icon: IconButton(
