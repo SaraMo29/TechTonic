@@ -6,7 +6,7 @@ import 'lessons_tab.dart';
 import 'certificate_tab.dart';
 
 class CourseContent extends StatelessWidget {
-  final String id; 
+  final String id;
   final String title;
   final double progress;
 
@@ -42,7 +42,7 @@ class CourseContent extends StatelessWidget {
           body: TabBarView(
             children: [
               LessonsTab(isCompleted: isCompleted, courseId: id),
-              CertificateTab(isCompleted: isCompleted),
+              CertificateTab(courseId: id, progress: progress),
             ],
           ),
           bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 1),

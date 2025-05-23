@@ -8,11 +8,11 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
+  flutter:
+    sdk: flutter
   carousel_slider: ^5.0.0
   image_picker: ^1.0.4
   chewie: ^1.11.3
-  flutter:
-    sdk: flutter
   font_awesome_flutter: ^10.8.0
   get: ^4.6.6
   http: ^1.2.2
@@ -25,7 +25,6 @@ dependencies:
   flutter_highlight: ^0.7.0
   code_text_field: ^1.1.0
   highlight: ^0.7.0
-  
 
 dev_dependencies:
   flutter_test:
