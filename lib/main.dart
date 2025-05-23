@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:graduation_project/controllers/book_mark_controller.dart';
 import 'package:graduation_project/controllers/login_controller.dart';
 import 'package:graduation_project/controllers/theme_controller.dart';
+import 'package:graduation_project/controllers/transaction_controller.dart';
 import 'package:graduation_project/screens/loginScreen.dart';
 import 'package:graduation_project/screens/splash_screen.dart';
 import 'package:graduation_project/screens/forgot_password_screen.dart';
@@ -13,6 +14,7 @@ import 'package:graduation_project/screens/home_screen.dart';
 void main() {
   Get.put(LoginController());
   Get.put(BookmarkController());
+  Get.put(TransactionController()); 
   runApp(MyApp());
 }
 
