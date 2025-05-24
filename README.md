@@ -1,6 +1,6 @@
 # TechTonic - E-Learning Platform
 
-[TechTonic Logo] <img src="assets/images/logo.png" alt="TechTonic Logo" width="200" /> <!-- Optional: add your logo here -->
+[TechTonic Logo] <img src="src/assets/images/logo.png" alt="TechTonic Logo" width="200" /> <!-- Optional: add your logo here -->
 
 ---
 
