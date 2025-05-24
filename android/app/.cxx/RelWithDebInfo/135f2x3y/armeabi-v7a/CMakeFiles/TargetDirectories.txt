@@ -1,0 +1,2 @@
+C:/TechTonic/src/android/app/.cxx/RelWithDebInfo/135f2x3y/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/TechTonic/src/android/app/.cxx/RelWithDebInfo/135f2x3y/armeabi-v7a/CMakeFiles/rebuild_cache.dir

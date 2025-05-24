@@ -1,0 +1,2 @@
+C:/TechTonic/src/android/app/.cxx/RelWithDebInfo/135f2x3y/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/TechTonic/src/android/app/.cxx/RelWithDebInfo/135f2x3y/arm64-v8a/CMakeFiles/rebuild_cache.dir
