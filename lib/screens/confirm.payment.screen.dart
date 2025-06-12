@@ -35,7 +35,8 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
   }
 
   void _showSuccessDialog(Map<String, dynamic> data) {
-    final already = data['Status']?.toString().toLowerCase() == 'already enrolled';
+    final already =
+        data['Status']?.toString().toLowerCase() == 'already enrolled';
 
     showDialog(
       context: context,
@@ -79,8 +80,8 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
           selected: _activeIndex == 0,
           onTap: () {
             setState(() => _activeIndex = 0);
-            Navigator.pop(context);           // close dialog
-            _txCtrl.fetchTransactions();      // refresh list
+            Navigator.pop(context); // close dialog
+            _txCtrl.fetchTransactions(); // refresh list
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -146,7 +147,8 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
               controller: _payCtrl.phoneController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 hintText: 'Eg. 01012345678',
               ),
             ),
@@ -160,14 +162,16 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                     _processPayment();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please enter a valid phone number')),
+                      const SnackBar(
+                          content: Text('Please enter a valid phone number')),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
                 child: const Text('Continue', style: TextStyle(fontSize: 16)),
               ),
