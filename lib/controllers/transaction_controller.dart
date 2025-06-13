@@ -40,7 +40,6 @@ class TransactionController extends GetxController {
         Get.snackbar('Error', body['message'] ?? 'Failed to load');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Something went wrong: $e');
     } finally {
       isLoading.value = false;
     }

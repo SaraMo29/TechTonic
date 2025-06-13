@@ -18,7 +18,6 @@ class InstructorDetailController extends GetxController {
     final loginController = Get.find<LoginController>();
     final token = loginController.token.value;
     if (token == null || token.isEmpty) {
-      Get.snackbar('Error', 'Token not found. Please login.');
       isLoading.value = false;
       return;
     }

@@ -115,7 +115,6 @@ class ConfirmPaymentController extends GetxController {
       'Error',
       message,
       snackPosition: SnackPosition.BOTTOM,
-      // ignore: deprecated_member_use
       backgroundColor: Colors.red.withOpacity(0.1),
       colorText: Colors.red,
       duration: Duration(seconds: 3),
