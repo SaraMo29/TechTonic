@@ -14,7 +14,6 @@ import 'package:graduation_project/screens/home_screen.dart';
 void main() {
   Get.put(LoginController());
   Get.put(BookmarkController());
-  Get.put(TransactionController());
   runApp(MyApp());
 }
 
@@ -30,13 +29,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
         themeMode: themeController.theme,
-        initialRoute: '/splash', 
+        initialRoute: '/splash',
         getPages: [
           GetPage(name: '/splash', page: () => SplashScreen()),
-          GetPage(name: '/login', page: () => Loginscreen()), 
+          GetPage(name: '/login', page: () => Loginscreen()),
           GetPage(name: '/forgot-password', page: () => ForgotPasswordScreen()),
-          GetPage(name: '/otp-verification', page: () => OtpVerificationScreen()),
-          GetPage(name: '/create-new-password', page: () => CreateNewPasswordScreen()),
+          GetPage(
+              name: '/otp-verification', page: () => OtpVerificationScreen()),
+          GetPage(
+              name: '/create-new-password',
+              page: () => CreateNewPasswordScreen()),
           GetPage(name: '/home', page: () => HomeScreen()),
         ],
       );
