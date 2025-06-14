@@ -14,7 +14,7 @@ import 'package:graduation_project/screens/home_screen.dart';
 void main() {
   Get.put(LoginController());
   Get.put(BookmarkController());
-  Get.put(TransactionController()); 
+  Get.put(TransactionController());
   runApp(MyApp());
 }
 

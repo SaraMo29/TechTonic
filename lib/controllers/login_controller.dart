@@ -19,7 +19,7 @@ class LoginController extends GetxController {
 
   static const String baseUrl = 'https://nafsi.onrender.com/api/v1';
   final Map<String, String> headers = {'Content-Type': 'application/json'};
-
+  var isFreshLogin = false.obs;
 
   Future<void> loginWithEmail() async {
     try {
@@ -41,8 +41,9 @@ class LoginController extends GetxController {
         if (json['status'] == 'SUCCESS') {
           token.value = json['data']['token'];
           await saveToken(token.value);
-          await fetchUserProfile(); // Fetch user info after login
-          await fetchCourses(); 
+          isFreshLogin.value = true; // Set flag after successful login
+          await fetchUserProfile();
+          await fetchCourses();
           Get.offNamed('/home');
           _showSuccessSnackbar('Login Successful', 'Welcome back!');
         }
@@ -260,12 +261,13 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadToken();
+    loadToken();
   }
 
-  Future<void> _loadToken() async {
+  Future<void> loadToken() async {
     final prefs = await SharedPreferences.getInstance();
     token.value = prefs.getString('auth_token') ?? '';
+    // Removed snackbar that was previously shown when token is empty
   }
 
   Future<void> saveToken(String newToken) async {

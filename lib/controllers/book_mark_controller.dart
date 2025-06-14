@@ -16,24 +16,12 @@ class BookmarkController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Listen to token changes
-    ever(_loginController.token, (String token) {
-      if (token.isNotEmpty) {
+    ever(_loginController.isFreshLogin, (isFresh) {
+      if (isFresh == true) {
         fetchWishlist();
-      } else {
-        courses.clear();
-        isLoading.value = false;
-        errorMessage.value = 'Please login to view your wishlist.';
+        _loginController.isFreshLogin.value = false; 
       }
     });
-
-    // Initial check
-    if (_loginController.token.value.isNotEmpty) {
-      fetchWishlist();
-    } else {
-      isLoading.value = false;
-      errorMessage.value = 'Please login to view your wishlist.';
-    }
   }
 
   Future<void> fetchWishlist() async {
@@ -46,7 +34,6 @@ class BookmarkController extends GetxController {
 
       if (_loginController.token.value.isEmpty) {
         print('No token available for fetchWishlist');
-        // Do not redirect or show snackbar here, just set error and stop loading
         errorMessage.value = 'Please login to view your wishlist.';
         isLoading.value = false;
         return;
@@ -149,7 +136,6 @@ class BookmarkController extends GetxController {
       print(
           'Using auth token: ${_loginController.token.value.isNotEmpty ? _loginController.token.value.substring(0, min(_loginController.token.value.length, 10)) : "empty"}...');
 
-      // Assuming the backend expects the courseId in the body as JSON
       final response = await http.put(
         url,
         headers: authHeaders,
@@ -309,8 +295,6 @@ class BookmarkController extends GetxController {
       colorText: Colors.red,
       duration: Duration(seconds: 3),
     );
-    // Do NOT redirect automatically. Let the user decide to log in again.
-    // await Future.delayed(Duration(seconds: 2));
-    // Get.offAllNamed('/login'); // Keep this commented out
+   
   }
 }
