@@ -267,7 +267,7 @@ class LoginController extends GetxController {
   Future<void> loadToken() async {
     final prefs = await SharedPreferences.getInstance();
     token.value = prefs.getString('auth_token') ?? '';
-    // Removed snackbar that was previously shown when token is empty
+  
   }
 
   Future<void> saveToken(String newToken) async {
