@@ -19,6 +19,7 @@ class LoginController extends GetxController {
 
   static const String baseUrl = 'https://nafsi.onrender.com/api/v1';
   final Map<String, String> headers = {'Content-Type': 'application/json'};
+   var isFreshLogin = false.obs;
 
   Future<void> loginWithEmail() async {
     try {
@@ -45,17 +46,24 @@ if (json['status'] == 'SUCCESS') {
 }
 
         if (json['status'] == 'SUCCESS') {
+          
   token.value = json['data']['token'];
-  await saveToken(token.value);
+  
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('token', token.value);
+  isFreshLogin.value = true;
   await fetchUserProfile();
+   await fetchCourses();
+   Get.offNamed('/home');
 
   final rawRole = json['data']['user']['roles'];
-  final roleString = rawRole.toString().toLowerCase(); // تحويل الدور لحروف صغيرة
+  final roleString = rawRole.toString(); 
   userRole.value = roleString;
 
   print("User role from API: $roleString");
 
-  if (roleString == 'instructor' || roleString == 'admin') {
+  if (roleString == 'Instructor' || roleString == 'admin') {
+    
     Get.offAllNamed('/admin-home');
   } else {
     await fetchCourses();

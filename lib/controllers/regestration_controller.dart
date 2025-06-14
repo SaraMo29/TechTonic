@@ -41,8 +41,6 @@ class RegistrationController extends GetxController {
 
     final json = jsonDecode(response.body);
 
-    // 👇 طباعة الداتا الراجعة من السيرفر
-    print("Response JSON: $json");
 
     if (response.statusCode == 200 && json['status'] == 'SUCCESS') {
       final data = json['data'];

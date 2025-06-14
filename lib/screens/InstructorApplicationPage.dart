@@ -32,7 +32,6 @@ class InstructorApplicationPage extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to the extra info screen before final registration
                   Get.toNamed(
                     '/instructor-extra-info',
                     arguments: {

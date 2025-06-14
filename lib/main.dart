@@ -18,6 +18,7 @@ void main() {
   Get.put(LoginController());
   Get.put(BookmarkController());
   Get.put(TransactionController());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
