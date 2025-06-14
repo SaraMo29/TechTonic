@@ -1,10 +1,11 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graduation_project/components/const_passTextFormField.dart';
 import 'package:graduation_project/components/custom_textFormField.dart';
 import 'package:graduation_project/controllers/regestration_controller.dart';
+import 'package:graduation_project/screens/InstructorApplicationPage.dart';
 import 'package:graduation_project/screens/loginScreen.dart';
+
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -15,14 +16,14 @@ class CreateAccountScreen extends StatefulWidget {
 
 bool rememberme = false;
 
-// ignore: camel_case_types
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
-  RegestrationController registerationController =
-      Get.put(RegestrationController());
+  RegistrationController registerationController = Get.put(RegistrationController());
+
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -50,18 +51,17 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
-                  textEditingController:
-                      registerationController.emailController,
+                  textEditingController: registerationController.emailController,
                   'email address',
                   lable: 'Email',
                   icon: Icons.email,
                 ),
                 const SizedBox(height: 20),
                 CustomPassTextfield(
-                  textEditingController:
-                      registerationController.passwordController,
+                  textEditingController: registerationController.passwordController,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
+               
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -79,18 +79,19 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    registerationController.registerWithEmail();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    minimumSize: Size(screenWidth * 0.8, 50),
-                  ),
-                  child: const Text(
-                    'Sign up',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                ),
+  onPressed: () {
+    Get.to(() => const InstructorApplicationPage());
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.blue,
+    minimumSize: Size(screenWidth * 0.8, 50),
+  ),
+  child: const Text(
+    'Sign up',
+    style: TextStyle(fontSize: 18, color: Colors.white),
+  ),
+),
+
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -104,22 +105,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CreateAccountScreen(),
+                            builder: (context) => const LoginScreen(),
                           ),
                         );
                       },
-                      child: TextButton(
-                        child: const Text(
-                          "Sign in",
-                          style: TextStyle(fontSize: 16, color: Colors.blue),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Loginscreen()),
-                          );
-                        },
+                      child: const Text(
+                        "Sign in",
+                        style: TextStyle(fontSize: 16, color: Colors.blue),
                       ),
                     ),
                   ],

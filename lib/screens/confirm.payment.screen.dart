@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/confirm_payment_controller.dart';
 import '../controllers/transaction_controller.dart';
+import '../controllers/enrolled_courses_controller.dart';
 import '../screens/course_content.dart';
 import '../screens/e_receipt_screen.dart';
 
@@ -22,11 +23,15 @@ class ConfirmPaymentScreen extends StatefulWidget {
 class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
   final ConfirmPaymentController _payCtrl = Get.put(ConfirmPaymentController());
   final TransactionController _txCtrl = Get.find<TransactionController>();
+  final EnrolledCoursesController _enrolledCtrl = Get.find<EnrolledCoursesController>();
   int _activeIndex = 0;
 
   Future<void> _processPayment() async {
     final success = await _payCtrl.processPayment(widget.courseId);
     if (success) {
+      // Refresh transactions and enrolled courses after successful payment
+      await _txCtrl.fetchTransactions();
+      await _enrolledCtrl.fetchEnrolledCourses();
       _showSuccessDialog(_payCtrl.receiptData.value);
     } else {
       final msg = _payCtrl.errorMessage.value;
@@ -35,8 +40,7 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
   }
 
   void _showSuccessDialog(Map<String, dynamic> data) {
-    final already =
-        data['Status']?.toString().toLowerCase() == 'already enrolled';
+    final already = data['Status']?.toString().toLowerCase() == 'already enrolled';
 
     showDialog(
       context: context,
@@ -80,8 +84,7 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
           selected: _activeIndex == 0,
           onTap: () {
             setState(() => _activeIndex = 0);
-            Navigator.pop(context); // close dialog
-            _txCtrl.fetchTransactions(); // refresh list
+            Navigator.pop(context);           // close dialog
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -101,7 +104,6 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
           onTap: () {
             setState(() => _activeIndex = 1);
             Navigator.pop(context);
-            _txCtrl.fetchTransactions();
             Get.off(() => ReceiptScreen(), arguments: data);
           },
         ),
@@ -147,8 +149,7 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
               controller: _payCtrl.phoneController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 hintText: 'Eg. 01012345678',
               ),
             ),
@@ -162,16 +163,14 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                     _processPayment();
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Please enter a valid phone number')),
+                      const SnackBar(content: Text('Please enter a valid phone number')),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 child: const Text('Continue', style: TextStyle(fontSize: 16)),
               ),

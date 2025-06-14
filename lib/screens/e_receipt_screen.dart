@@ -7,13 +7,22 @@ import 'transaction_screen.dart';
 
 class ReceiptScreen extends StatelessWidget {
   ReceiptScreen({Key? key}) : super(key: key);
-  final tx = Get.arguments as TransactionModel;
+  final dynamic txData = Get.arguments;
   final df = DateFormat('MMM dd, yyyy | HH:mm:ss');
+  
+  // Check if the data is a TransactionModel or a Map
+  bool get isTransactionModel => txData is TransactionModel;
 
   String get _paymentMethod {
-    if (tx.purchasePhone.startsWith('010')) return 'Vodafone Cash';
-    if (tx.purchasePhone.startsWith('011')) return 'Etisalat Cash';
-    return 'Other';
+    if (isTransactionModel) {
+      final tx = txData as TransactionModel;
+      if (tx.purchasePhone.startsWith('010')) return 'Vodafone Cash';
+      if (tx.purchasePhone.startsWith('011')) return 'Etisalat Cash';
+      return 'Other';
+    } else {
+      final data = txData as Map<String, dynamic>;
+      return data['Payment Method'] ?? 'Other';
+    }
   }
 
   @override
@@ -42,27 +51,50 @@ class ReceiptScreen extends StatelessWidget {
           children: [
             Image.asset('assets/images/e-receipt.jpg', height:100, fit:BoxFit.contain),
             const SizedBox(height:10),
-            Center(child: Text(tx.transactionId, style: const TextStyle(fontWeight: FontWeight.w600))),
+            Center(child: Text(
+              isTransactionModel 
+                ? (txData as TransactionModel).transactionId 
+                : ((txData as Map<String, dynamic>)['Transaction ID'] ?? 'N/A'),
+              style: const TextStyle(fontWeight: FontWeight.w600)
+            )),
             const SizedBox(height:20),
 
             _Section([
-              _Info("Course", tx.courseTitle),
-              _Info("Category", tx.courseCategory),
+              _Info("Course", isTransactionModel 
+                ? (txData as TransactionModel).courseTitle 
+                : ((txData as Map<String, dynamic>)['Course'] ?? 'N/A')),
+              _Info("Category", isTransactionModel 
+                ? (txData as TransactionModel).courseCategory 
+                : ((txData as Map<String, dynamic>)['Category'] ?? 'N/A')),
             ]),
             const SizedBox(height:16),
 
             _Section([
-              _Info("Name", tx.userName),
-              _Info("Email", tx.userEmail),
+              _Info("Name", isTransactionModel 
+                ? (txData as TransactionModel).userName 
+                : ((txData as Map<String, dynamic>)['Name'] ?? 'N/A')),
+              _Info("Email", isTransactionModel 
+                ? (txData as TransactionModel).userEmail 
+                : ((txData as Map<String, dynamic>)['Email'] ?? 'N/A')),
             ]),
             const SizedBox(height:16),
 
             _Section([
-              _Info("Price", "${tx.coursePriceCurrency} ${tx.coursePriceAmount}"),
+              _Info("Price", isTransactionModel 
+                ? "${(txData as TransactionModel).coursePriceCurrency} ${(txData as TransactionModel).coursePriceAmount}" 
+                : ((txData as Map<String, dynamic>)['Price'] ?? 'N/A')),
               _Info("Payment Method", _paymentMethod),
-              _Info("Date", df.format(tx.createdAt)),
-              _Info("Transaction ID", tx.transactionId),
-              _Info("Status", tx.status, badge: true),
+              _Info("Date", isTransactionModel 
+                ? df.format((txData as TransactionModel).createdAt) 
+                : ((txData as Map<String, dynamic>)['Date'] is DateTime 
+                    ? df.format((txData as Map<String, dynamic>)['Date']) 
+                    : ((txData as Map<String, dynamic>)['Date']?.toString() ?? 'N/A'))),
+              _Info("Transaction ID", isTransactionModel 
+                ? (txData as TransactionModel).transactionId 
+                : ((txData as Map<String, dynamic>)['Transaction ID'] ?? 'N/A')),
+              _Info("Status", isTransactionModel 
+                ? (txData as TransactionModel).status 
+                : ((txData as Map<String, dynamic>)['Status'] ?? 'Completed'), badge: true),
             ]),
           ],
         ),
