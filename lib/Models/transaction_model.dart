@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 class TransactionModel {
   final String transactionId;
   final String courseTitle;
@@ -30,20 +32,43 @@ class TransactionModel {
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
-    return TransactionModel(
-      transactionId: json['transactionId'],
-      courseTitle: json['courseTitle'],
-      courseCategory: json['courseCategory']['name'],
-      courseImage: json['courseImage'],
-      userName: json['userName'],
-      userEmail: json['userEmail'],
-      purchasePhone: json['purchasePhone'],
-      coursePriceAmount: double.parse(json['coursePrice']['amount']),
-      coursePriceCurrency: json['coursePrice']['currency'],
-      transactionPriceAmount: (json['transactionPrice']['amount'] as num).toDouble(),
-      transactionPriceCurrency: json['transactionPrice']['currency'],
-      status: json['status'],
-      createdAt: DateTime.parse(json['createdAt']),
-    );
+    // Print the JSON to debug
+    print('Transaction JSON: $json');
+    
+    try {
+      return TransactionModel(
+        transactionId: json['_id'] ?? '',
+        courseTitle: json['course']?['title'] ?? 'Unknown Course',
+        courseCategory: json['course']?['category']?['name'] ?? 'Uncategorized',
+        courseImage: json['course']?['thumbnail'] ?? 'https://via.placeholder.com/150',
+        userName: json['user']?['name'] ?? 'Unknown User',
+        userEmail: json['user']?['email'] ?? 'unknown@example.com',
+        purchasePhone: json['phoneNumber'] ?? '',
+        coursePriceAmount: double.tryParse(json['course']?['price']?['amount']?.toString() ?? '0') ?? 0.0,
+        coursePriceCurrency: json['course']?['price']?['currency'] ?? 'USD',
+        transactionPriceAmount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0.0,
+        transactionPriceCurrency: json['currency'] ?? 'USD',
+        status: json['status'] ?? 'Unknown',
+        createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+      );
+    } catch (e) {
+      print('Error parsing transaction: $e');
+      // Return a fallback model with error information
+      return TransactionModel(
+        transactionId: 'error-${DateTime.now().millisecondsSinceEpoch}',
+        courseTitle: 'Error Loading Course',
+        courseCategory: 'Error',
+        courseImage: 'https://via.placeholder.com/150',
+        userName: 'Error',
+        userEmail: 'error@example.com',
+        purchasePhone: '',
+        coursePriceAmount: 0.0,
+        coursePriceCurrency: 'USD',
+        transactionPriceAmount: 0.0,
+        transactionPriceCurrency: 'USD',
+        status: 'Error: ${e.toString().substring(0, math.min(e.toString().length, 50))}',
+        createdAt: DateTime.now(),
+      );
+    }
   }
 }
