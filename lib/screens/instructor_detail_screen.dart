@@ -16,11 +16,11 @@ class InstructorDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final InstructorDetailController controller = Get.put(InstructorDetailController());
 
-    // Fetch instructor data when screen is built
+    
     controller.fetchInstructorProfile(instructorId);
 
     return DefaultTabController(
-      length: 2, // or however many tabs you have
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Instructor Profile"),
