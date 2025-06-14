@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:graduation_project/controllers/login_controller.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -76,7 +75,8 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
         });
         return;
       }
-      const String url = 'https://nafsi.onrender.com/api/v1/course/getInstructorCourse';
+      const String url =
+          'https://nafsi.onrender.com/api/v1/course/getInstructorCourse';
       final response = await http.get(
         Uri.parse(url),
         headers: {
@@ -91,7 +91,8 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
           courses = results.map((e) => InstructorCourse.fromJson(e)).toList();
           if (courses.isNotEmpty) {
             instructorName = courses[0].instructorName;
-            instructorPhoto = 'assets/images/myphoto.jpg'; // Replace with actual photo if available
+            instructorPhoto =
+                'assets/images/myphoto.jpg'; // Replace with actual photo if available
           }
           isLoading = false;
         });
@@ -109,24 +110,6 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
     }
   }
 
-=======
-import 'add_course_screen.dart';
-
-class InstructorHomeScreen extends StatelessWidget {
-  final List<Map<String, String>> courses = [
-    {
-      'title': 'Flutter Basics',
-      'image': 'https://via.placeholder.com/150',
-    },
-    {
-      'title': 'Advanced Dart',
-      'image': 'https://via.placeholder.com/150',
-    },
-  ];
-
-  InstructorHomeScreen({super.key});
-
->>>>>>> 5c35b5cd4c29149a77bd8e4f8003df09160d324a
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,15 +123,14 @@ class InstructorHomeScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {},
-<<<<<<< HEAD
               child: CircleAvatar(
-                      backgroundImage: loginController
-                              .userProfileImage.value.isNotEmpty
-                          ? NetworkImage(loginController.userProfileImage.value)
-                          : const AssetImage("assets/images/myphoto.jpg")
-                              as ImageProvider,
-                      radius: 25,
-                    ),
+                backgroundImage:
+                    loginController.userProfileImage.value.isNotEmpty
+                        ? NetworkImage(loginController.userProfileImage.value)
+                        : const AssetImage("assets/images/myphoto.jpg")
+                            as ImageProvider,
+                radius: 25,
+              ),
             ),
             const SizedBox(width: 20),
             Column(
@@ -157,26 +139,12 @@ class InstructorHomeScreen extends StatelessWidget {
                 const Text("Welcome Back 👋",
                     style: TextStyle(fontSize: 14, color: Colors.grey)),
                 Text(
-                  instructorName.isNotEmpty ? instructorName : "Instructor Name",
+                  instructorName.isNotEmpty
+                      ? instructorName
+                      : "Instructor Name",
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.black),
                 ),
-=======
-              child: const CircleAvatar(
-                backgroundImage: AssetImage("assets/images/myphoto.jpg"),
-                radius: 25,
-              ),
-            ),
-            const SizedBox(width: 20),
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Welcome Back 👋",
-                    style: TextStyle(fontSize: 14, color: Colors.grey)),
-                Text("Instructor Name",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black)),
->>>>>>> 5c35b5cd4c29149a77bd8e4f8003df09160d324a
               ],
             ),
           ],
@@ -189,7 +157,6 @@ class InstructorHomeScreen extends StatelessWidget {
           const SizedBox(width: 20),
         ],
       ),
-<<<<<<< HEAD
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : errorMessage.isNotEmpty
@@ -231,69 +198,19 @@ class InstructorHomeScreen extends StatelessWidget {
                           style: const TextStyle(color: Colors.grey),
                         ),
                         trailing: IconButton(
-                          icon: const Icon(Icons.delete_outline, color: Colors.red),
+                          icon: const Icon(Icons.delete_outline,
+                              color: Colors.red),
                           onPressed: () {},
                         ),
                       ),
                     );
                   },
                 ),
-=======
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: courses.length,
-        itemBuilder: (context, index) {
-          final course = courses[index];
-          return Container(
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.grey[100],
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  blurRadius: 5,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ListTile(
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  course['image']!,
-                  width: 60,
-                  height: 60,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              title: Text(
-                course['title']!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete_outline, color: Colors.red),
-                onPressed: () {},
-              ),
-            ),
-          );
-        },
-      ),
->>>>>>> 5c35b5cd4c29149a77bd8e4f8003df09160d324a
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.blue,
         icon: const Icon(Icons.add),
         label: const Text("Add Course"),
-<<<<<<< HEAD
         onPressed: () {},
-=======
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddCourseScreen()),
-          );
-        },
->>>>>>> 5c35b5cd4c29149a77bd8e4f8003df09160d324a
       ),
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 30,
@@ -301,7 +218,6 @@ class InstructorHomeScreen extends StatelessWidget {
         unselectedItemColor: Colors.grey,
         currentIndex: 0,
         showUnselectedLabels: true,
-<<<<<<< HEAD
         items: [
           BottomNavigationBarItem(
               icon: IconButton(
@@ -315,17 +231,8 @@ class InstructorHomeScreen extends StatelessWidget {
                 onPressed: () {},
               ),
               label: 'Profile'),
-=======
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
->>>>>>> 5c35b5cd4c29149a77bd8e4f8003df09160d324a
         ],
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 5c35b5cd4c29149a77bd8e4f8003df09160d324a
