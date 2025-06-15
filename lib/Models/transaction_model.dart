@@ -32,43 +32,49 @@ class TransactionModel {
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
-    // Print the JSON to debug
-    print('Transaction JSON: $json');
-    
-    try {
-      return TransactionModel(
-        transactionId: json['_id'] ?? '',
-        courseTitle: json['course']?['title'] ?? 'Unknown Course',
-        courseCategory: json['course']?['category']?['name'] ?? 'Uncategorized',
-        courseImage: json['course']?['thumbnail'] ?? 'https://via.placeholder.com/150',
-        userName: json['user']?['name'] ?? 'Unknown User',
-        userEmail: json['user']?['email'] ?? 'unknown@example.com',
-        purchasePhone: json['phoneNumber'] ?? '',
-        coursePriceAmount: double.tryParse(json['course']?['price']?['amount']?.toString() ?? '0') ?? 0.0,
-        coursePriceCurrency: json['course']?['price']?['currency'] ?? 'USD',
-        transactionPriceAmount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0.0,
-        transactionPriceCurrency: json['currency'] ?? 'USD',
-        status: json['status'] ?? 'Unknown',
-        createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
-      );
-    } catch (e) {
-      print('Error parsing transaction: $e');
-      // Return a fallback model with error information
-      return TransactionModel(
-        transactionId: 'error-${DateTime.now().millisecondsSinceEpoch}',
-        courseTitle: 'Error Loading Course',
-        courseCategory: 'Error',
-        courseImage: 'https://via.placeholder.com/150',
-        userName: 'Error',
-        userEmail: 'error@example.com',
-        purchasePhone: '',
-        coursePriceAmount: 0.0,
-        coursePriceCurrency: 'USD',
-        transactionPriceAmount: 0.0,
-        transactionPriceCurrency: 'USD',
-        status: 'Error: ${e.toString().substring(0, math.min(e.toString().length, 50))}',
-        createdAt: DateTime.now(),
-      );
-    }
+  print('Transaction JSON: $json');
+
+  const baseUrl = 'https://your-domain.com'; 
+
+  try {
+    final rawImage = json['courseId']?['thumbnail'];
+    final fullImage = (rawImage != null && rawImage.startsWith('http'))
+        ? rawImage
+        : '$baseUrl$rawImage';
+
+    return TransactionModel(
+      transactionId: json['_id'] ?? '',
+      courseTitle: json['courseId']?['title'] ?? 'Unknown Course',
+      courseCategory: json['courseId']?['category']?['name'] ?? 'Uncategorized',
+      courseImage: fullImage,
+      userName: json['user']?['name'] ?? 'Unknown User',
+      userEmail: json['user']?['email'] ?? 'unknown@example.com',
+      purchasePhone: json['phoneNumber'] ?? '',
+      coursePriceAmount: double.tryParse(json['courseId']?['price']?['amount']?.toString() ?? '0') ?? 0.0,
+      coursePriceCurrency: json['courseId']?['price']?['currency'] ?? 'USD',
+      transactionPriceAmount: double.tryParse(json['transactionPrice']?['amount']?.toString() ?? '0') ?? 0.0,
+      transactionPriceCurrency: json['transactionPrice']?['currency'] ?? 'USD',
+      status: json['status'] ?? 'Unknown',
+      createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+    );
+  } catch (e) {
+    print('Error parsing transaction: $e');
+    return TransactionModel(
+      transactionId: 'error-${DateTime.now().millisecondsSinceEpoch}',
+      courseTitle: 'Error Loading Course',
+      courseCategory: 'Error',
+      courseImage: 'https://via.placeholder.com/150',
+      userName: 'Error',
+      userEmail: 'error@example.com',
+      purchasePhone: '',
+      coursePriceAmount: 0.0,
+      coursePriceCurrency: 'USD',
+      transactionPriceAmount: 0.0,
+      transactionPriceCurrency: 'USD',
+      status: 'Error: ${e.toString().substring(0, math.min(e.toString().length, 50))}',
+      createdAt: DateTime.now(),
+    );
   }
+}
+
 }

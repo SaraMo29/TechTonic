@@ -15,9 +15,7 @@ class TransactionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // أول تحميل
     fetchTransactions();
-    // إعادة التحميل كلما تغيّر التوكن (login/logout)
     ever(_loginCtrl.token, (_) {
       transactions.clear();
       fetchTransactions();
@@ -28,25 +26,26 @@ class TransactionController extends GetxController {
     try {
       isLoading.value = true;
       final token = _loginCtrl.token.value;
+
       if (token.isEmpty) {
         print('Token is empty, skipping transaction fetch');
         return;
       }
-      
+
       print('Fetching transactions with token: ${token.substring(0, math.min(10, token.length))}...');
       final res = await http.get(
         Uri.parse('$_baseUrl/transaction/user'),
         headers: {'Authorization': 'Bearer $token'},
       );
-      
+
       print('Transaction API response status: ${res.statusCode}');
       print('Transaction API response body: ${res.body.substring(0, math.min(200, res.body.length))}...');
-      
+
       final body = jsonDecode(res.body);
       if (res.statusCode == 200 && body['status'] == 'SUCCESS') {
         final dataList = body['data'] as List;
         print('Found ${dataList.length} transactions');
-        
+
         transactions.value = dataList
             .map((e) => TransactionModel.fromJson(e))
             .toList();
@@ -55,6 +54,8 @@ class TransactionController extends GetxController {
         Get.snackbar('Error', body['message'] ?? 'Failed to load transactions');
       }
     } catch (e) {
+      print('Exception fetching transactions: $e');
+      Get.snackbar('Error', 'Something went wrong.');
     } finally {
       isLoading.value = false;
     }

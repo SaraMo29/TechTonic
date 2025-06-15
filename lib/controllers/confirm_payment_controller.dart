@@ -47,16 +47,18 @@ class ConfirmPaymentController extends GetxController {
       if ((res.statusCode == 200 || res.statusCode == 201)
           && jsonRes['status'] == 'SUCCESS') {
         print('Payment successful!');
-        final data = jsonRes['data'] ?? {};
+        final data = jsonRes['data']?['transaction'] ?? {};
         print('Transaction data: $data');
-        
+
+        final txPrice = data['transactionPrice'] ?? {};
+
         receiptData.value = {
           'Transaction ID': data['_id'] ?? 'N/A',
-          'Course': data['course']?['title'] ?? 'N/A',
-          'Category': data['course']?['category']?['name'] ?? 'N/A',
-          'Name': data['user']?['name'] ?? 'N/A',
-          'Email': data['user']?['email'] ?? 'N/A',
-          'Price': "${data['amount'] ?? 0} ${data['currency'] ?? ''}",
+          'Course': 'N/A', // لا يوجد عنوان كورس في الريسبونس الحالي
+          'Category': 'N/A',
+          'Name': 'N/A', // لا يوجد معلومات مستخدم في الريسبونس الحالي
+          'Email': 'N/A',
+          'Price': "${txPrice['amount'] ?? 0} ${txPrice['currency'] ?? ''}",
           'Payment Method': _paymentMethod(phoneController.text.trim()),
           'Date': DateTime.tryParse(data['createdAt'] ?? '') ?? DateTime.now(),
           'Status': data['status'] ?? 'Completed',
