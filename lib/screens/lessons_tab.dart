@@ -160,7 +160,6 @@ class LessonsTab extends StatelessWidget {
                               Get.snackbar("Error", "API error: ${response.statusCode}");
                             }
                           } catch (e) {
-                            Get.snackbar("Error", "Something went wrong: $e");
                           }
 
                           Navigator.push(

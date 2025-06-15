@@ -60,7 +60,6 @@ class EnrolledCoursesController extends GetxController {
     } catch (e) {
       print('Exception during enrolled courses fetch: $e');
       print('Stack trace: ${StackTrace.current}');
-      Get.snackbar('Error', 'Something went wrong: $e');
     } finally {
       print('Enrolled courses fetch completed, loading state set to false');
       isLoading.value = false;

@@ -55,7 +55,6 @@ class TransactionController extends GetxController {
       }
     } catch (e) {
       print('Exception fetching transactions: $e');
-      Get.snackbar('Error', 'Something went wrong.');
     } finally {
       isLoading.value = false;
     }

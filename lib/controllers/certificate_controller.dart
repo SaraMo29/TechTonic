@@ -54,8 +54,6 @@ class CertificateController extends GetxController {
         Get.snackbar('Error', errorMessage.value);
       }
     } catch (e) {
-      errorMessage.value = 'Something went wrong: $e';
-      Get.snackbar('Error', errorMessage.value);
     } finally {
       isLoading.value = false;
     }
