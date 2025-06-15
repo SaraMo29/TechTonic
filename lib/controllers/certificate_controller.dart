@@ -11,14 +11,11 @@ class CertificateController extends GetxController {
   var downloadSuccess = false.obs;
   var errorMessage = ''.obs;
 
-  // Check if the course is completed (progress is 100%)
   bool canDownloadCertificate(double progress) {
-    return progress >= 1.0; // 1.0 represents 100%
+    return progress >= 1.0;
   }
 
-  // Download certificate from the API
   Future<void> downloadCertificate(String courseId, double progress) async {
-    // Validate progress is 100%
     if (!canDownloadCertificate(progress)) {
       errorMessage.value = 'Course must be completed to download certificate';
       return;
@@ -32,11 +29,9 @@ class CertificateController extends GetxController {
       final token = _loginController.token.value;
       if (token.isEmpty) {
         errorMessage.value = 'No token available. Please login again.';
+        isLoading.value = false;
         return;
       }
-
-      // Convert progress to 100 for the API requirement
-      final int progressValue = 100; // API requires progress to be exactly 100
 
       final response = await http.post(
         Uri.parse('$baseUrl/certificate/'),
@@ -44,15 +39,14 @@ class CertificateController extends GetxController {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({'courseId': courseId, 'score': progressValue}),
+        body: jsonEncode({'courseId': courseId, 'score': 100}),
       );
 
       final jsonResponse = jsonDecode(response.body);
 
-      if (response.statusCode == 200 && jsonResponse['status'] == 'SUCCESS') {
+      if ((response.statusCode == 200 || response.statusCode == 201) &&
+          jsonResponse['status'] == 'SUCCESS') {
         downloadSuccess.value = true;
-        // Handle the certificate data here
-        // This could involve saving the certificate or opening it
         Get.snackbar('Success', 'Certificate downloaded successfully');
       } else {
         errorMessage.value =

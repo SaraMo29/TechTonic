@@ -45,6 +45,14 @@ class CertificateTab extends StatelessWidget {
                           style: const TextStyle(color: Colors.red),
                         ),
                       ),
+                    if (certificateController.downloadSuccess.value)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          'Certificate sent to your email.',
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ),
                   ],
                 )
               : const Text('Complete the course to unlock your certificate.'),
