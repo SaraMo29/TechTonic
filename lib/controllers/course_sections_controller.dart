@@ -32,13 +32,12 @@ class CourseSectionsController extends GetxController {
             .map((sectionJson) => LessonSection.fromJson(sectionJson))
             .toList();
       } else {
-        Get.snackbar('Error', sectionsJson['message'] ?? 'Failed to fetch sections');
       }
       
       // Fetch course progress
       await fetchCourseProgress(courseId);
     } catch (e) {
-      Get.snackbar('Error', 'Something went wrong: $e');
+      
     } finally {
       isLoading.value = false;
     }

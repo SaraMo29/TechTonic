@@ -57,7 +57,7 @@ class _TopMentorsScreenState extends State<TopMentorsScreen> {
           final students = mentor["totalStudents"]?.toString() ?? '0';
 
           return {
-            "id": mentor["_id"]?.toString() ?? "", // <-- Add this line
+            "id": mentor["_id"]?.toString() ?? "", 
             "name": mentor["name"] ?? "No Name",
             "image": mentor["profileImage"] ?? "",
             "job": "Instructor ★ $rating\n$courses Course - $students Student"
@@ -123,7 +123,7 @@ class _TopMentorsScreenState extends State<TopMentorsScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => InstructorDetailScreen(
-                                  instructorId: mentor["id"] ?? "", // Make sure "id" is included in mentor data
+                                  instructorId: mentor["id"] ?? "", 
                                 ),
                               ),
                             );
