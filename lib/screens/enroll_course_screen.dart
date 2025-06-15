@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'confirm.payment.screen.dart';
+import '../controllers/enrolled_courses_controller.dart';
 
 class EnrollCourseScreen extends StatefulWidget {
   final String courseId;
@@ -24,11 +26,18 @@ class _EnrollCourseScreenState extends State<EnrollCourseScreen> {
 
     if (selectedMethod == 'Vodafone Cash' ||
         selectedMethod == 'Etisalat Cash') {
+      // تأكد من تسجيل EnrolledCoursesController قبل الذهاب
+      if (!Get.isRegistered<EnrolledCoursesController>()) {
+        Get.put(EnrolledCoursesController());
+      }
+
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => ConfirmPaymentScreen(
-              providerName: selectedMethod!, courseId: widget.courseId),
+            providerName: selectedMethod!,
+            courseId: widget.courseId,
+          ),
         ),
       );
     } else {
